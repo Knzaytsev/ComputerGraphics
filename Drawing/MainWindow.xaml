@@ -1,0 +1,16 @@
+﻿<Window x:Class="Drawing.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Drawing"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="688" MouseDown="pickElement_MouseDown" PreviewMouseMove="dragElement_PreviewMouseMove" MouseUp="dragElement_MouseUp">
+            <Button x:Name="createLine" Content="Создать" Width="75" Canvas.Left="705" Canvas.Top="16" Click="createLine_Click"/>
+            <Button x:Name="deleteLine" Content="Удалить" Width="75" Canvas.Left="705" Canvas.Top="55" Click="deleteLine_Click"/>
+        </Canvas>
+
+    </Grid>
+</Window>
