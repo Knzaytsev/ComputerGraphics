@@ -39,7 +39,7 @@ namespace Drawing.Interactors
         public Shape MoveShape(double x, double y, Shape line)
         {
             var changedLine = line as Line;
-            double[,] matrixData = { 
+            double[,] matrixData = {
                 { changedLine.X1, changedLine.Y1, 1 }, 
                 { changedLine.X2, changedLine.Y2, 1 } 
             };
@@ -70,9 +70,8 @@ namespace Drawing.Interactors
 
         public Shape PickShape(Shape line)
         {
-            var pickedLine = line as Shape;
-            pickedLine.Stroke = Brushes.Red;
-            return pickedLine;
+            line.Stroke = Brushes.Red;
+            return line;
         }
 
         public bool CheckHittingPoint(Point point, Point center, double r)

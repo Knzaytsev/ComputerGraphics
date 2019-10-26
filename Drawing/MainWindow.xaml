@@ -7,10 +7,24 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="688" MouseDown="pickElement_MouseDown" PreviewMouseMove="dragElement_PreviewMouseMove" MouseUp="dragElement_MouseUp">
-            <Button x:Name="createLine" Content="Создать" Width="75" Canvas.Left="705" Canvas.Top="16" Click="createLine_Click"/>
-            <Button x:Name="deleteLine" Content="Удалить" Width="75" Canvas.Left="705" Canvas.Top="55" Click="deleteLine_Click"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="355*"/>
+            <ColumnDefinition Width="41*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="createLine" Content="Создать" Click="createLine_Click" Margin="9,15,11,367" RenderTransformOrigin="0.5,0.5" Grid.Column="1">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="0.272"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="0.995"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <Button x:Name="deleteLine" Content="Удалить" Click="deleteLine_Click" Margin="10,57,10,325" Grid.Column="1"/>
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="680" MouseDown="pickElement_MouseDown" PreviewMouseMove="dragElement_PreviewMouseMove" Margin="0,0,0,-1">
         </Canvas>
-
+        <Label x:Name="mousePosition" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="32,215,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="coordinateSystem_Button" Content="СК" Grid.Column="1" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="62" Height="40" Click="coordinateSystem_Button_Click"/>
     </Grid>
 </Window>

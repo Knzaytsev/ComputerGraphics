@@ -22,15 +22,14 @@ namespace Drawing
     public partial class MainWindow : Window
     {
         private LineInteractor interactor = new LineInteractor();
+        private CoordinateSystemInteractor coordinateSystem;
         private Line currentLine = new Line();
         private Point oldPoint;
-        delegate void PickItem(object sender, MouseEventArgs e);
-        event PickItem Pick;
 
         public MainWindow()
         {
             InitializeComponent();
-            canvas.Children.Add(currentLine);
+            coordinateSystem = new CoordinateSystem2DInteractor(canvas.Width, canvas.Height);
         }
 
         private void createLine_Click(object sender, RoutedEventArgs e)
@@ -47,8 +46,11 @@ namespace Drawing
 
         private void pickElement_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            currentLine.Stroke = Brushes.Black;
-            currentLine = interactor.PickShape(e.Source as Line) as Line;
+            if (!(e.Source as Shape is null))
+            {
+                currentLine.Stroke = Brushes.Black;
+                currentLine = interactor.PickShape(e.Source as Shape) as Line;
+            }
         }
 
         private void dragElement_PreviewMouseMove(object sender, MouseEventArgs e)
@@ -80,16 +82,28 @@ namespace Drawing
                 }
             }
             oldPoint = e.GetPosition(canvas);
+            var curPos = coordinateSystem.GetPoint(e.GetPosition(canvas));
+            mousePosition.Content = curPos[0] + "; " + curPos[1];
         }
 
-        private void MainWindow_Pick(object sender, MouseEventArgs e)
+        private void coordinateSystem_Button_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
-        }
-
-        private void dragElement_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            Pick = null;
+            var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
+            if (!lines.Any())
+            {
+                var createdLines = coordinateSystem.CreateAxes(canvas.Width, canvas.Height, 200);
+                foreach (var l in createdLines)
+                {
+                    canvas.Children.Add(l);
+                }
+            }
+            else
+            {
+                for(var i = 0; i < lines.Length; ++i)
+                {
+                    canvas.Children.Remove(lines[i]);
+                }
+            }
         }
     }
 }
