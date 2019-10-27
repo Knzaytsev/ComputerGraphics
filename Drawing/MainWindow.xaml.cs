@@ -24,12 +24,16 @@ namespace Drawing
         private LineInteractor interactor = new LineInteractor();
         private CoordinateSystemInteractor coordinateSystem;
         private Line currentLine = new Line();
+        private bool picked = false;
         private Point oldPoint;
 
         public MainWindow()
         {
             InitializeComponent();
             coordinateSystem = new CoordinateSystem2DInteractor(canvas.Width, canvas.Height);
+            MouseMove += dragElement_MouseMove;
+            MouseDown += pickElement_MouseDown;
+            MouseUp += dropElement_MouseUp;
         }
 
         private void createLine_Click(object sender, RoutedEventArgs e)
@@ -50,17 +54,21 @@ namespace Drawing
             {
                 currentLine.Stroke = Brushes.Black;
                 currentLine = interactor.PickShape(e.Source as Shape) as Line;
+                var equation = interactor.GetEquation(currentLine, coordinateSystem);
+                lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
+                canvas.MouseMove += dragElement_MouseMove;
+                picked = true;
             }
         }
 
-        private void dragElement_PreviewMouseMove(object sender, MouseEventArgs e)
+        private void dragElement_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                if(e.Source == currentLine)
+                if(picked)
                 {
                     var point = e.GetPosition(canvas);
-                    var r = 10f;
+                    var r = 20f;
                     var centerFirstEnd = new Point(currentLine.X1, currentLine.Y1);
                     var centerSecondEnd = new Point(currentLine.X2, currentLine.Y2);
                     var checkHittingFirstEnd = interactor.CheckHittingPoint(point, centerFirstEnd, r);
@@ -84,8 +92,6 @@ namespace Drawing
             oldPoint = e.GetPosition(canvas);
             var curPos = coordinateSystem.GetPoint(e.GetPosition(canvas));
             mousePosition.Content = curPos[0] + "; " + curPos[1];
-            var equation = interactor.GetEquation(currentLine, coordinateSystem);
-            lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
         }
 
         private void coordinateSystem_Button_Click(object sender, RoutedEventArgs e)
@@ -106,6 +112,13 @@ namespace Drawing
                     canvas.Children.Remove(lines[i]);
                 }
             }
+        }
+
+        private void dropElement_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var equation = interactor.GetEquation(currentLine, coordinateSystem);
+            lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
+            picked = false;
         }
     }
 }

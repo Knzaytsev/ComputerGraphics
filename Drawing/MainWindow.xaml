@@ -5,27 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Drawing"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="823">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="355*"/>
-            <ColumnDefinition Width="41*"/>
-        </Grid.ColumnDefinitions>
-        <Button x:Name="createLine" Content="Создать" Click="createLine_Click" Margin="9,15,11,367" RenderTransformOrigin="0.5,0.5" Grid.Column="1">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="0.272"/>
-                    <RotateTransform/>
-                    <TranslateTransform X="0.995"/>
-                </TransformGroup>
-            </Button.RenderTransform>
-        </Button>
-        <Button x:Name="deleteLine" Content="Удалить" Click="deleteLine_Click" Margin="10,57,10,325" Grid.Column="1"/>
-        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="680" MouseDown="pickElement_MouseDown" PreviewMouseMove="dragElement_PreviewMouseMove" Margin="0,0,0,-1">
+
+        <Button x:Name="createLine" Content="Создать" Click="createLine_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="696,20,0,0" Height="37" Width="63"/>
+        <Button x:Name="deleteLine" Content="Удалить" Click="deleteLine_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="697,62,0,0" Height="37" Width="62"/>
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="680"  Margin="0,0,0,-1">
         </Canvas>
-        <Label x:Name="mousePosition" Content="Позиция" Grid.Column="1" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="coordinateSystem_Button" Content="СК" Grid.Column="1" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="62" Height="40" Click="coordinateSystem_Button_Click"/>
-        <Label x:Name="lineEquation" Content="Ур-е" Grid.Column="1" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="mousePosition" Content="Позиция" HorizontalAlignment="Left" Margin="696,152,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="coordinateSystem_Button" Content="СК" HorizontalAlignment="Left" Margin="696,104,0,0" VerticalAlignment="Top" Width="62" Height="40" Click="coordinateSystem_Button_Click"/>
+        <Label x:Name="lineEquation" Content="Ур-е" HorizontalAlignment="Left" Margin="697,178,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

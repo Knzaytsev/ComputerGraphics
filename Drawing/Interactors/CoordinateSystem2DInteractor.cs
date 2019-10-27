@@ -89,8 +89,8 @@ namespace Drawing.Interactors
 
         public override double[] GetPoint(Point point)
         {
-            double x = point.X - vectorCenter[0];
-            double y = vectorCenter[1] - point.Y;
+            double x = Math.Round(point.X - vectorCenter[0]);
+            double y = Math.Round(vectorCenter[1] - point.Y);
             return new double[2] { x, y };
         }
 
