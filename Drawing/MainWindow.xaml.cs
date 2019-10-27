@@ -84,6 +84,8 @@ namespace Drawing
             oldPoint = e.GetPosition(canvas);
             var curPos = coordinateSystem.GetPoint(e.GetPosition(canvas));
             mousePosition.Content = curPos[0] + "; " + curPos[1];
+            var equation = interactor.GetEquation(currentLine, coordinateSystem);
+            lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
         }
 
         private void coordinateSystem_Button_Click(object sender, RoutedEventArgs e)
@@ -91,7 +93,7 @@ namespace Drawing
             var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
             if (!lines.Any())
             {
-                var createdLines = coordinateSystem.CreateAxes(canvas.Width, canvas.Height, 200);
+                var createdLines = coordinateSystem.CreateAxes(canvas.Width, canvas.Height, 50);
                 foreach (var l in createdLines)
                 {
                     canvas.Children.Add(l);

@@ -30,27 +30,9 @@ namespace Drawing.Interactors
 
             for (var i = startPointX; i < width; i += step)
             {
-                Line mark = new Line()
-                {
-                    X1 = i,
-                    X2 = i,
-                    Y1 = centerHeigth - 5,
-                    Y2 = centerHeigth + 5,
-                    Stroke = Brushes.Gray,
-                    Focusable = false,
-                    IsEnabled = false,
-                    Name = "Axis"
-                };
+                var mark = CreateLine(i, centerHeigth - 5, i, centerHeigth);
 
-                Label label = new Label()
-                {
-                    Name = "Axis",
-                    Content = x,
-                    Foreground = Brushes.Gray,
-                    IsEnabled = false,
-                    Focusable = false,
-                    Margin = new Thickness(i + 6, centerHeigth + 6, 0, 0)
-                };
+                var label = CreateLabel(i, centerHeigth, x);
                 lines.Add(label);
 
                 x += step;
@@ -59,68 +41,56 @@ namespace Drawing.Interactors
 
             for (var i = startPointY; i < heigth; i += step)
             {
-                Line mark = new Line()
-                {
-                    Y1 = i,
-                    Y2 = i,
-                    X1 = centerWidth - 5,
-                    X2 = centerWidth + 5,
-                    Stroke = Brushes.Gray,
-                    Focusable = false,
-                    IsEnabled = false,
-                    Name = "Axis"
-                };
+                var mark = CreateLine(centerWidth - 5, i, centerWidth + 5, i);
 
-                Label label = new Label()
-                {
-                    Name = "Axis",
-                    Content = y,
-                    Foreground = Brushes.Gray,
-                    IsEnabled = false,
-                    Focusable = false,
-                    Margin = new Thickness(centerWidth + 6, i + 6, 0, 0)
-                };
+                var label = CreateLabel(centerWidth, i, y);
                 lines.Add(label);
 
                 y -= step;
                 lines.Add(mark);
             }
 
-            Line lineX = new Line()
-            {
-                X1 = width / 2,
-                X2 = width / 2,
-                Y1 = 0,
-                Y2 = heigth,
-                Stroke = Brushes.Gray,
-                StrokeThickness = 2,
-                Name = "Axis",
-                Focusable = false,
-                IsEnabled = false
-            };
+            var lineX = CreateLine(centerWidth, 0, centerWidth, heigth);
             lines.Add(lineX);
 
-            Line lineY = new Line()
-            {
-                X1 = 0,
-                X2 = width,
-                Y1 = heigth / 2,
-                Y2 = heigth / 2,
-                Stroke = Brushes.Gray,
-                StrokeThickness = 2,
-                Name = "Axis",
-                Focusable = false,
-                IsEnabled = false
-            };
+            var lineY = CreateLine(0, centerHeigth, width, centerHeigth);
             lines.Add(lineY);
 
             return lines;
         }
 
-        public override double[] GetPoint(Point mousePoint)
+        private Line CreateLine(double x1, double y1, double x2, double y2)
         {
-            double x = mousePoint.X - vectorCenter[0];
-            double y = vectorCenter[1] - mousePoint.Y;
+            return new Line()
+            {
+                X1 = x1,
+                X2 = x2,
+                Y1 = y1,
+                Y2 = y2,
+                Stroke = Brushes.Gray,
+                Focusable = false,
+                IsEnabled = false,
+                Name = "Axis"
+            };
+        }
+
+        private Label CreateLabel(double left, double top, double point)
+        {
+            return new Label()
+            {
+                Name = "Axis",
+                Content = point,
+                Foreground = Brushes.Gray,
+                IsEnabled = false,
+                Focusable = false,
+                Margin = new Thickness(left + 6, top + 6, 0, 0)
+            };
+        }
+
+        public override double[] GetPoint(Point point)
+        {
+            double x = point.X - vectorCenter[0];
+            double y = vectorCenter[1] - point.Y;
             return new double[2] { x, y };
         }
 

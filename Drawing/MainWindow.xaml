@@ -24,7 +24,8 @@
         <Button x:Name="deleteLine" Content="Удалить" Click="deleteLine_Click" Margin="10,57,10,325" Grid.Column="1"/>
         <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="680" MouseDown="pickElement_MouseDown" PreviewMouseMove="dragElement_PreviewMouseMove" Margin="0,0,0,-1">
         </Canvas>
-        <Label x:Name="mousePosition" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="32,215,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="mousePosition" Content="Позиция" Grid.Column="1" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top"/>
         <Button x:Name="coordinateSystem_Button" Content="СК" Grid.Column="1" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="62" Height="40" Click="coordinateSystem_Button_Click"/>
+        <Label x:Name="lineEquation" Content="Ур-е" Grid.Column="1" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

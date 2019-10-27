@@ -8,14 +8,14 @@ using System.Windows.Shapes;
 
 namespace Drawing.Interactors
 {
-    interface ShapeInteractor
+    abstract class ShapeInteractor
     {
-        void DeleteShape(Shape shape);
+        public abstract void DeleteShape(Shape shape);
 
-        Shape MoveShape(double x, double y, Shape shape);
+        public abstract Shape MoveShape(double x, double y, Shape shape);
 
-        Shape PickShape(Shape shape);
+        public abstract Shape PickShape(Shape shape);
 
-
+        public abstract double[] GetEquation(Shape shape, CoordinateSystemInteractor coordinate);
     }
 }
