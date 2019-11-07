@@ -25,8 +25,7 @@ namespace Drawing
         private LineInteractor interactor = new LineInteractor();
         private CoordinateSystemInteractor coordinateSystem;
         private Line currentLine = new Line();
-        private Component shape;
-        private bool picked = false;
+        private Composite.Composite shape;
         private bool downed = false;
         private Point oldPoint;
 
@@ -34,7 +33,8 @@ namespace Drawing
         {
             InitializeComponent();
             coordinateSystem = new CoordinateSystem2DInteractor(canvas.Width, canvas.Height);
-            shape = new Composite.Composite(currentLine);
+            canvas.Children.Add(currentLine);
+            shape = new Composite.Composite(currentLine, coordinateSystem);
             MouseMove += dragElement_MouseMove;
             MouseDown += pickElement_MouseDown;
             MouseUp += dropElement_MouseUp;
@@ -60,17 +60,34 @@ namespace Drawing
 
         private void deleteLine_Click(object sender, RoutedEventArgs e)
         {
-            interactor.DeleteShape(currentLine);
+            shape.RemoveAll();
             currentLine = new Line();
             canvas.Children.Add(currentLine);
+            shape = new Composite.Composite(currentLine, coordinateSystem);
         }
 
         private void pickElement_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (downed && !(e.Source as Shape is null))
+            if (e.Source is Shape)
             {
-                currentLine = interactor.PickShape(e.Source as Shape) as Line;
-                shape.Add(new Leaf(currentLine));
+                if (!downed)
+                {
+                    shape.ClearColor();
+                    currentLine = new Line();
+                    canvas.Children.Add(currentLine);
+                    shape = new Composite.Composite(currentLine, coordinateSystem);
+                }
+
+                shape.PickAddShape(e.Source as Shape);
+
+                var equation = shape.GetEquation();
+                lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
+            }
+            /*if (downed && !(e.Source as Shape is null))
+            {
+                currentLine = shape.PickAddShape(e.Source as Shape) as Line;
+                //currentLine = interactor.PickShape(e.Source as Shape) as Line;
+                //shape.Add(new Composite.Composite(currentLine));
             }
             else if (!(e.Source as Shape is null))
             {
@@ -81,40 +98,14 @@ namespace Drawing
                 var equation = interactor.GetEquation(currentLine, coordinateSystem);
                 lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
                 picked = true;
-            }
+            }*/
         }
 
         private void dragElement_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if(e.LeftButton == MouseButtonState.Pressed)
             {
-                if (downed)
-                {
-                    shape.MoveShape(oldPoint, e.GetPosition(canvas));
-                }
-                else if(picked)
-                {
-                    var point = e.GetPosition(canvas);
-                    var r = 20f;
-                    var centerFirstEnd = new Point(currentLine.X1, currentLine.Y1);
-                    var centerSecondEnd = new Point(currentLine.X2, currentLine.Y2);
-                    var checkHittingFirstEnd = interactor.CheckHittingPoint(point, centerFirstEnd, r);
-                    var checkHittingSecondEnd = interactor.CheckHittingPoint(point, centerSecondEnd, r);
-                    if (checkHittingFirstEnd)
-                    {
-                        interactor.MoveFirstPoint(currentLine, point, oldPoint);
-                    }
-                    else if (checkHittingSecondEnd)
-                    {
-                        interactor.MoveSecondPoint(currentLine, point, oldPoint);
-                    }
-                    else
-                    {
-                        var deltaX = point.X - oldPoint.X;
-                        var deltaY = point.Y - oldPoint.Y;
-                        currentLine = interactor.MoveShape(deltaX, deltaY, currentLine) as Line;
-                    }
-                }
+                shape.MoveShape(oldPoint, e.GetPosition(canvas));
             }
             oldPoint = e.GetPosition(canvas);
             var curPos = coordinateSystem.GetPoint(e.GetPosition(canvas));
@@ -143,9 +134,11 @@ namespace Drawing
 
         private void dropElement_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            var equation = interactor.GetEquation(currentLine, coordinateSystem);
-            lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
-            picked = false;
+            if (e.Source is Shape)
+            {
+                var equation = shape.GetEquation();
+                lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
+            }
         }
     }
 }

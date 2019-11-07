@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Drawing.Interactors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,16 +12,22 @@ namespace Drawing.Composite
     abstract class Component
     {
         protected Shape shape;
-
-        public Component(Shape shape)
+        protected LineInteractor interactor = new LineInteractor();
+        protected CoordinateSystemInteractor coordinate;
+            
+        public Component(Shape shape, CoordinateSystemInteractor coordinate)
         {
             this.shape = shape;
+            this.coordinate = coordinate;
         }
 
-        public abstract void Display();
+        public abstract Shape Display();
         public abstract void Add(Component c);
-        public abstract void Remove(Component c);
+        public abstract void RemoveAll();
         public abstract void ClearColor();
         public abstract void MoveShape(Point oldPos, Point newPos);
+        public abstract void PickAddShape(Shape shape);
+        public abstract bool Contains(Shape shape);
+        public abstract double[] GetEquation();
     }
 }

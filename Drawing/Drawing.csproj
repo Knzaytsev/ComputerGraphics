@@ -77,7 +77,6 @@
     </Compile>
     <Compile Include="Composite\Component.cs" />
     <Compile Include="Composite\Composite.cs" />
-    <Compile Include="Composite\Leaf.cs" />
     <Compile Include="Interactors\CoordinateSystem2DInteractor.cs" />
     <Compile Include="Interactors\CoordinateSystemInteractor.cs" />
     <Compile Include="Interactors\LineInteractor.cs" />
