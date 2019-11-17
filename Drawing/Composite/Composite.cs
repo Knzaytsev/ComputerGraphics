@@ -100,5 +100,16 @@ namespace Drawing.Composite
         {
             return interactor.GetEquation(children.Last().Display(), coordinate);
         }
+
+        public double[] GetCoordinates()
+        {
+            var movedShape = children.Last().Display();
+            var first = new Point((movedShape as Line).X1, (movedShape as Line).Y1);
+            var second = new Point((movedShape as Line).X2, (movedShape as Line).Y2);
+            var firstEnd = coordinate.GetPoint(first).ToList();
+            var secondEnd = coordinate.GetPoint(second).ToList();
+            firstEnd.AddRange(secondEnd);
+            return firstEnd.ToArray();
+        }
     }
 }

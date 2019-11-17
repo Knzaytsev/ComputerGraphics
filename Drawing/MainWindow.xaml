@@ -14,6 +14,7 @@
         </Canvas>
         <Label x:Name="mousePosition" Content="Позиция" HorizontalAlignment="Left" Margin="696,152,0,0" VerticalAlignment="Top"/>
         <Button x:Name="coordinateSystem_Button" Content="СК" HorizontalAlignment="Left" Margin="696,104,0,0" VerticalAlignment="Top" Width="62" Height="40" Click="coordinateSystem_Button_Click"/>
-        <Label x:Name="lineEquation" Content="Ур-е" HorizontalAlignment="Left" Margin="697,178,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lineEquation" Content="Ур-е" HorizontalAlignment="Left" Margin="697,209,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="endsCoord" Content="Концы линии" HorizontalAlignment="Left" Margin="697,178,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

@@ -82,23 +82,11 @@ namespace Drawing
 
                 var equation = shape.GetEquation();
                 lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
+
+                var endCoordinates = shape.GetCoordinates();
+                endsCoord.Content = "(" + endCoordinates[0] + "; " + endCoordinates[1] + ")\n" +
+                    "(" + endCoordinates[2] + "; " + endCoordinates[3] + ")";
             }
-            /*if (downed && !(e.Source as Shape is null))
-            {
-                currentLine = shape.PickAddShape(e.Source as Shape) as Line;
-                //currentLine = interactor.PickShape(e.Source as Shape) as Line;
-                //shape.Add(new Composite.Composite(currentLine));
-            }
-            else if (!(e.Source as Shape is null))
-            {
-                shape.ClearColor();
-                //currentLine.Stroke = Brushes.Black;
-                currentLine = interactor.PickShape(e.Source as Shape) as Line;
-                shape = new Composite.Composite(currentLine);
-                var equation = interactor.GetEquation(currentLine, coordinateSystem);
-                lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
-                picked = true;
-            }*/
         }
 
         private void dragElement_MouseMove(object sender, MouseEventArgs e)
@@ -138,6 +126,10 @@ namespace Drawing
             {
                 var equation = shape.GetEquation();
                 lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
+
+                var endCoordinates = shape.GetCoordinates();
+                endsCoord.Content = "(" + endCoordinates[0] + "; " + endCoordinates[1] + ")\n" +
+                    "(" + endCoordinates[2] + "; " + endCoordinates[3] + ")";
             }
         }
     }
