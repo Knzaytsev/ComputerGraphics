@@ -5,16 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Drawing"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="823">
+        Title="MainWindow" Height="450" Width="1039">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="810*"/>
+            <ColumnDefinition Width="221*"/>
+        </Grid.ColumnDefinitions>
 
-        <Button x:Name="createLine" Content="Создать" Click="createLine_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="696,20,0,0" Height="37" Width="63"/>
+        <TextBox x:Name="addZ1TextBlock" HorizontalAlignment="Left" Height="20" Margin="698,271,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="74" KeyUp="KeyUpZ1"/>
+
+        <Button x:Name="createLine" Content="Создать" Click="createLine_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="697,20,0,0" Height="37" Width="62"/>
         <Button x:Name="deleteLine" Content="Удалить" Click="deleteLine_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="697,62,0,0" Height="37" Width="62"/>
-        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="680"  Margin="0,0,0,-1">
-        </Canvas>
-        <Label x:Name="mousePosition" Content="Позиция" HorizontalAlignment="Left" Margin="696,152,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="coordinateSystem_Button" Content="СК" HorizontalAlignment="Left" Margin="696,104,0,0" VerticalAlignment="Top" Width="62" Height="40" Click="coordinateSystem_Button_Click"/>
-        <Label x:Name="lineEquation" Content="Ур-е" HorizontalAlignment="Left" Margin="697,209,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="endsCoord" Content="Концы линии" HorizontalAlignment="Left" Margin="697,178,0,0" VerticalAlignment="Top"/>
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="680"  Margin="0,0,0,-1"/>
+        <Label x:Name="mousePosition" Content="Позиция" HorizontalAlignment="Left" Margin="696,152,0,0" VerticalAlignment="Top" Height="26" Width="58"/>
+        <Button x:Name="coordinateSystem_Button" Content="СК" HorizontalAlignment="Left" Margin="697,104,0,0" VerticalAlignment="Top" Width="62" Height="40" Click="coordinateSystem_Button_Click"/>
+        <Label x:Name="lineEquation" Content="Ур-е" HorizontalAlignment="Left" Margin="697,243,0,0" VerticalAlignment="Top" Height="27" Width="103"/>
+        <Label x:Name="endsCoord" Content="Концы линии" HorizontalAlignment="Left" Margin="697,178,0,0" VerticalAlignment="Top" Height="65" Width="103"/>
+        <DataGrid x:Name="dgOperationMatrix" HorizontalAlignment="Left" Height="124" Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" AreRowDetailsFrozen="True">
+        </DataGrid>
+        <Button x:Name="doZ" Content="Добавить Z" Margin="698,321,38,0" VerticalAlignment="Top" Click="doZ_Click"/>
+        <Slider x:Name="phiSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,178,0,0" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="phiSlider_ValueChanged"/>
+        <Slider x:Name="thetaSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,225,0,0" VerticalAlignment="Top" Width="201" Maximum="360" Minimum="0" ValueChanged="thetaSlider_ValueChanged"/>
+        <TextBox x:Name="addZ2TextBlock" HorizontalAlignment="Left" Height="20" Margin="698,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="74" KeyUp="KeyUpZ2"/>
+        <Slider x:Name="zcSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,271,0,0" VerticalAlignment="Top" Width="200" Minimum="0" Maximum="50" ValueChanged="zcSlider_ValueChanged"/>
+
     </Grid>
 </Window>

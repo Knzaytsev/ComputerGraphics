@@ -23,5 +23,7 @@ namespace Drawing.Interactors
         public abstract void SetScale(int scale);
 
         public abstract List<UIElement> CreateAxes(double width, double heigth, double stepAxis);
+
+        public abstract double[] ToNormalCoordinates(Point point);
     }
 }

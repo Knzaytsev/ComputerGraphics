@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace Drawing.Interactors

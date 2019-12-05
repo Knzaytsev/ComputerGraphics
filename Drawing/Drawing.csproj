@@ -76,7 +76,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Composite\Component.cs" />
-    <Compile Include="Composite\Composite.cs" />
+    <Compile Include="Composite\MainShape.cs" />
+    <Compile Include="Composite\UnderLine.cs" />
+    <Compile Include="CustomLine.cs" />
+    <Compile Include="Data\GridData.cs" />
+    <Compile Include="Interactors\ComputingMatrix.cs" />
     <Compile Include="Interactors\CoordinateSystem2DInteractor.cs" />
     <Compile Include="Interactors\CoordinateSystemInteractor.cs" />
     <Compile Include="Interactors\LineInteractor.cs" />

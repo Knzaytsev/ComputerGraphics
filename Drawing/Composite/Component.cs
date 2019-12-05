@@ -29,5 +29,6 @@ namespace Drawing.Composite
         public abstract void PickAddShape(Shape shape);
         public abstract bool Contains(Shape shape);
         public abstract double[] GetEquation();
+        public abstract double[] GetCoordinates();
     }
 }

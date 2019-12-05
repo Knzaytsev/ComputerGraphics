@@ -108,5 +108,12 @@ namespace Drawing.Interactors
         {
             this.Scale = scale;
         }
+
+        public override double[] ToNormalCoordinates(Point point)
+        {
+            var x = point.X + vectorCenter[0];
+            var y = point.Y + vectorCenter[1];
+            return new double[2] { x, y };
+        }
     }
 }
