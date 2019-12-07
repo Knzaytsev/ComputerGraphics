@@ -74,7 +74,6 @@ namespace Drawing.Composite
         public override double[] GetEquation()
         {
             return children.Last().GetEquation();
-            //return interactor.GetEquation(children.Last().Display(), coordinate);
         }
 
         public override double[] GetCoordinates()
@@ -85,150 +84,105 @@ namespace Drawing.Composite
         public void AddZ(double[] z)
         {
             (children.Last() as UnderLine).SetZ(z);
-            /*foreach(var c in children)
-            {
-                (c as UnderLine).SetZ(z);
-            }*/
         }
 
-        public void ProjectReal3D(double[,] operation)
+        public void ProjectReal3D(/*double[,] operation, */double zc)
         {
             var childrenCount = children.Count;
-            var data = new double[childrenCount * 2, 4];
-            for (var i = 0; i < childrenCount; ++i)
-            {
-                var line = children[i];
-                var dataLine = (line as UnderLine).GetRealMatrix();
-                data[i * 2, 0] = dataLine[0, 0];
-                data[i * 2, 1] = dataLine[0, 1];
-                data[i * 2, 2] = dataLine[0, 2];
-                data[i * 2, 3] = 1;
+            var data = MakeDataFromLines(childrenCount);
 
-                data[i * 2 + 1, 0] = dataLine[1, 0];
-                data[i * 2 + 1, 1] = dataLine[1, 1];
-                data[i * 2 + 1, 2] = dataLine[1, 2];
-                data[i * 2 + 1, 3] = 1;
-            }
-
-            ComputingMatrix cm = new ComputingMatrix();
+            var cm = new ComputingMatrix();
             cm.AddData(data);
-            cm.AddOperation(operation);
+            cm.AddOperation(new double[,]
+            {
+                    {1, 0, 0, 0 },
+                    {0, 1, 0, 0 },
+                    {0, 0, 0, -1 / zc },
+                    {0, 0, 0, 1 }
+            });
             cm.ComputeMatrix();
 
-            var result = cm.GetResult();
-
-            for (var i = 0; i < childrenCount; ++i)
-            {
-                var visibleMatrix = new double[,]
-                {
-                    { result[i * 2, 0], result[i * 2, 1] },
-                    { result[i * 2 + 1, 0], result[i * 2 + 1, 1] }
-                };
-                (children[i] as UnderLine).SetVisibleMatrix(visibleMatrix);
-            }
-        }
-
-        public void ComputeReal3D(double[,] operation)
-        {
-            var childrenCount = children.Count;
-            var data = new double[childrenCount * 2, 4];
-            for (var i = 0; i < childrenCount; ++i)
-            {
-                var line = children[i];
-                var dataLine = (line as UnderLine).GetRealMatrix();
-                data[i * 2, 0] = dataLine[0, 0];
-                data[i * 2, 1] = dataLine[0, 1];
-                data[i * 2, 2] = dataLine[0, 2];
-                data[i * 2, 3] = 1;
-
-                data[i * 2 + 1, 0] = dataLine[1, 0];
-                data[i * 2 + 1, 1] = dataLine[1, 1];
-                data[i * 2 + 1, 2] = dataLine[1, 2];
-                data[i * 2 + 1, 3] = 1;
-            }
-
-            ComputingMatrix cm = new ComputingMatrix();
-            cm.AddData(data);
-            cm.AddOperation(operation);
-            cm.ComputeMatrix();
-
-            var result = cm.GetResult();
-
-            for(var i = 0; i < childrenCount; ++i)
-            {
-                var realMatrix = new double[,]
-                {
-                    { result[i * 2, 0], result[i * 2, 1], result[i * 2, 2], result[i * 2, 3] },
-                    { result[i * 2 + 1, 0], result[i * 2 + 1, 1], result[i * 2 + 1, 2], result[i * 2 + 1, 3] }
-                };
-                (children[i] as UnderLine).SetRealMatrix(realMatrix);
-            }
-        } 
-
-        public void Compute3D(double[,] operation)
-        {
-            var childrenCount = children.Count;
-            var data = new double[childrenCount * 2, 4];
-            for(var i = 0; i < childrenCount; ++i)
-            {
-                var line = children[i];
-                var dataLine = (line as UnderLine).GetRealMatrix();
-                data[i * 2, 0] = dataLine[0, 0];
-                data[i * 2, 1] = dataLine[0, 1];
-                data[i * 2, 2] = dataLine[0, 2];
-                data[i * 2, 3] = 1;
-
-                data[i * 2 + 1, 0] = dataLine[1, 0];
-                data[i * 2 + 1, 1] = dataLine[1, 1];
-                data[i * 2 + 1, 2] = dataLine[1, 2];
-                data[i * 2 + 1, 3] = 1;
-                /*var line = children[i].Display() as Line;
-                var z = (children[i] as UnderLine).GetZ();
-                var point = coordinate.GetPoint(new Point(line.X1, line.Y1));
-                //data[i, 0] = line.X1;
-                //data[i, 1] = line.Y1;
-                data[i*2, 0] = point[0];
-                data[i*2, 1] = point[1];
-                data[i*2, 2] = z[0];
-                data[i*2, 3] = 1;
-                point = coordinate.GetPoint(new Point(line.X2, line.Y2));
-                //data[i + 1, 0] = line.X2;
-                //data[i + 1, 1] = line.Y2;
-                data[i*2 + 1, 0] = point[0];
-                data[i*2 + 1, 1] = point[1];
-                data[i*2 + 1, 2] = z[1];
-                data[i*2 + 1, 3] = 1;*/
-            }
-            ComputingMatrix cm = new ComputingMatrix();
-            cm.AddData(data);
-            cm.AddOperation(operation);
-            cm.ComputeMatrix();
             var result = cm.GetResult();
 
             for(var i = 0; i < childrenCount; ++i)
             {
                 var line = children[i].Display() as Line;
-                /*line.X1 = result[i, 0];
-                line.Y1 = result[i, 1];
-                line.X2 = result[i + 1, 0];
-                line.Y2 = result[i + 1, 1];*/
-                var point = coordinate.ToNormalCoordinates(new Point(result[2*i, 0], result[2*i, 1]));
-                line.X1 = point[0];
-                line.Y1 = point[1];
-                point = coordinate.ToNormalCoordinates(new Point(result[2*i + 1, 0], result[2*i + 1, 1]));
-                line.X2 = point[0];
-                line.Y2 = point[1];
+                var newPoint1 = coordinate.ToNormalCoordinates(new Point(result[i * 2, 0], result[i * 2, 1]));
+                var newPoint2 = coordinate.ToNormalCoordinates(new Point(result[i * 2 + 1, 0], result[i * 2 + 1, 1]));
 
-                /*var oldPoint = new Point(line.X1, line.Y1);
-                var newPoint = new Point(point[0], point[1]);
+                line.X1 += newPoint1[0] - line.X1;
+                line.Y1 += newPoint1[1] - line.Y1;
+                line.X2 += newPoint2[0] - line.X2;
+                line.Y2 += newPoint2[1] - line.Y2;
+            }
+            /*cm.ComputeMatrix();
+            //cm.AddOperation(cm.GetNonNormalizedResult());
+            cm.AddOperation(cm.GetResult());
+            cm.AddData(data);
+            cm.ComputeMatrix();
 
-                children[i].MoveShape(oldPoint, newPoint);*/
+
+            var result = cm.GetResult();
+
+            for (var i = 0; i < childrenCount; ++i)
+            {
+                var line = children[i].Display() as Line;
+                var newPoint1 = coordinate.ToNormalCoordinates(new Point(result[i * 2, 0], result[i * 2, 1]));
+                var newPoint2 = coordinate.ToNormalCoordinates(new Point(result[i * 2 + 1, 0], result[i * 2 + 1, 1]));
+
+                line.X1 += newPoint1[0] - line.X1;
+                line.Y1 += newPoint1[1] - line.Y1;
+                line.X2 += newPoint2[0] - line.X2;
+                line.Y2 += newPoint2[1] - line.Y2;
+            }*/
+        }
+
+        public void ComputeReal3D(double[,] operation)
+        {
+            var childrenCount = children.Count;
+            var data = MakeDataFromLines(childrenCount);
+            
+            ComputingMatrix cm = new ComputingMatrix();
+            cm.AddData(data);
+            cm.AddOperation(operation);
+            cm.ComputeMatrix();
+
+            var result = cm.GetResult();
+
+            for(var i = 0; i < childrenCount; ++i)
+            {
+                var underLine = children[i] as UnderLine;
+                var point1 = coordinate.ToNormalCoordinates(new Point(result[i * 2, 0], result[i * 2, 1]));
+                var point2 = coordinate.ToNormalCoordinates(new Point(result[i * 2 + 1, 0], result[i * 2 + 1, 1]));
+                var realMatrix = new double[,]
+                {
+                    { point1[0], point1[1], result[i * 2, 2], result[i * 2, 3] },
+                    { point2[0], point2[1], result[i * 2 + 1, 2], result[i * 2 + 1, 3] }
+                };
+                underLine.SetRealMatrix(realMatrix);
             }
         }
 
-        public void Compute3DVisible(double[,] operation)
+        private double[,] MakeDataFromLines(int n)
         {
+            var data = new double[n * 2, 4];
+            for (var i = 0; i < n; ++i)
+            {
+                var line = children[i];
+                var dataLine = (line as UnderLine).GetRealMatrix();
+                var point1 = coordinate.GetPoint(new Point(dataLine[0, 0], dataLine[0, 1]));
+                data[i * 2, 0] = point1[0];
+                data[i * 2, 1] = point1[1];
+                data[i * 2, 2] = dataLine[0, 2];
+                data[i * 2, 3] = 1;
 
+                var point2 = coordinate.GetPoint(new Point(dataLine[1, 0], dataLine[1, 1]));
+                data[i * 2 + 1, 0] = point2[0];
+                data[i * 2 + 1, 1] = point2[1];
+                data[i * 2 + 1, 2] = dataLine[1, 2];
+                data[i * 2 + 1, 3] = 1;
+            }
+            return data;
         }
     }
 }

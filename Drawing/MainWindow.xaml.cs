@@ -39,8 +39,8 @@ namespace Drawing
             coordinateSystem = new CoordinateSystem2DInteractor(canvas.Width, canvas.Height);
             canvas.Children.Add(currentLine);
             shape = new Composite.MainShape(currentLine, coordinateSystem);
-            var matrix = MakeOperationMatrix(phi, theta, zc);
-            SetValuesDataGrid(matrix);
+            //var matrix = MakeOperationMatrix(phi, theta, zc);
+            //SetValuesDataGrid(matrix);
             ActivateDoZ();
             //canvas.MouseMove += dragElement_MouseMove;
             MouseMove += dragElement_MouseMove;
@@ -162,45 +162,61 @@ namespace Drawing
 
         private void phiSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            phi = e.NewValue;
-            var matrix = MakeOperationMatrix(phi, 0, zc);
-            SetValuesDataGrid(matrix);
-            //dgOperationMatrix.ItemsSource = matrix;
-            shape.Compute3D(matrix);
-        }
-
-        private double[,] MakeOperationMatrix(double phi, double theta, double zc)
-        {
-            var phiAngle = phi * Math.PI / 180;
-            var thetaAngle = theta * Math.PI / 180;
-            var sinPhi = Math.Sin(phiAngle);
-            var sinTheta = Math.Sin(thetaAngle);
-            var cosPhi = Math.Cos(phiAngle);
-            var cosTheta = Math.Cos(thetaAngle);
-            return new double[4, 4] {
-                { cosPhi, sinPhi * sinTheta, 0, sinPhi * cosTheta / zc },
-                { 0, cosTheta, 0, -sinTheta / zc },
-                { sinPhi, -cosPhi * sinTheta, 0, cosPhi * cosTheta / zc },
+            phi = Math.Round(e.NewValue);
+            var md = new MatrixData(phi, 0, zc);
+            var rotateMatrix = new double[,]
+            {
+                { 1, 0, 0, 0},
+                { 0, md.CosPhi, md.SinPhi, 0 },
+                { 0, -md.SinPhi, md.CosPhi, 0 },
                 { 0, 0, 0, 1 }
             };
+
+            //shape.ProjectReal3D(rotateMatrix, md.Zc);
+
+            shape.ComputeReal3D(rotateMatrix);
+
+            shape.ProjectReal3D(md.Zc);
+
+            SetValuesDataGrid(rotateMatrix);
         }
 
         private void thetaSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            theta = e.NewValue;
-            var matrix = MakeOperationMatrix(0, theta, zc);
-            SetValuesDataGrid(matrix);
-            //dgOperationMatrix.ItemsSource = matrix;
-            shape.Compute3D(matrix);
+            theta = Math.Round(e.NewValue);
+            var md = new MatrixData(0, theta, zc);
+            var rotateMatrix = new double[,]
+            {
+                { md.CosTheta, 0, -md.SinTheta, 0},
+                { 0, 1, 0, 0 },
+                { md.SinTheta, 0,  md.CosTheta, 0 },
+                { 0, 0, 0, 1 }
+            };
+
+            //shape.ProjectReal3D(rotateMatrix, md.Zc);
+
+            shape.ComputeReal3D(rotateMatrix);
+
+            shape.ProjectReal3D(md.Zc);
+
+            SetValuesDataGrid(rotateMatrix);
         }
 
         private void zcSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            zc = e.NewValue + 10;
-            var matrix = MakeOperationMatrix(0, 0, zc);
-            SetValuesDataGrid(matrix);
-            //dgOperationMatrix.ItemsSource = matrix;
-            shape.Compute3D(matrix);
+            zc = Math.Round(e.NewValue) + 10;
+            MatrixData md = new MatrixData(0, 0, zc);
+
+            var operation = new double[,]
+            {
+                { 1, 0, 0, 0 },
+                { 0, 1, 0, 0 },
+                { 0, 0, 1, 0 },
+                { 0, 0, 0, 1 }
+            };
+            //shape.ProjectReal3D(operation, md.Zc);
+
+            shape.ProjectReal3D(md.Zc);
         }
 
         private GridData GetRow(int index, double[,] matrix)

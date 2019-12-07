@@ -27,7 +27,7 @@
         <Slider x:Name="phiSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,178,0,0" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="phiSlider_ValueChanged"/>
         <Slider x:Name="thetaSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,225,0,0" VerticalAlignment="Top" Width="201" Maximum="360" Minimum="0" ValueChanged="thetaSlider_ValueChanged"/>
         <TextBox x:Name="addZ2TextBlock" HorizontalAlignment="Left" Height="20" Margin="698,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="74" KeyUp="KeyUpZ2"/>
-        <Slider x:Name="zcSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,271,0,0" VerticalAlignment="Top" Width="200" Minimum="0" Maximum="50" ValueChanged="zcSlider_ValueChanged"/>
+        <Slider x:Name="zcSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,271,0,0" VerticalAlignment="Top" Width="200" Minimum="0" Maximum="100" ValueChanged="zcSlider_ValueChanged"/>
 
     </Grid>
 </Window>

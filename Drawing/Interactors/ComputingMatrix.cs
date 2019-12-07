@@ -23,6 +23,11 @@ namespace Drawing.Interactors
             data = data.Multiply(operation);
         }
 
+        public double[,] GetNonNormalizedResult()
+        {
+            return data.ToArray();
+        }
+
         public double[,] GetResult()
         {
             var arrayData = data.ToArray();

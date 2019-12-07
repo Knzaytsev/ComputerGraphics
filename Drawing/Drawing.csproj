@@ -80,6 +80,7 @@
     <Compile Include="Composite\UnderLine.cs" />
     <Compile Include="CustomLine.cs" />
     <Compile Include="Data\GridData.cs" />
+    <Compile Include="Data\MatrixData.cs" />
     <Compile Include="Interactors\ComputingMatrix.cs" />
     <Compile Include="Interactors\CoordinateSystem2DInteractor.cs" />
     <Compile Include="Interactors\CoordinateSystemInteractor.cs" />
