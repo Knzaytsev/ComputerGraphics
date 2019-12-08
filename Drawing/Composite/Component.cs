@@ -23,10 +23,9 @@ namespace Drawing.Composite
 
         public abstract Shape Display();
         public abstract void Add(Component c);
-        public abstract void RemoveAll();
+        public abstract void Remove();
         public abstract void ClearColor();
         public abstract void MoveShape(Point oldPos, Point newPos);
-        public abstract void PickAddShape(Shape shape);
         public abstract bool Contains(Shape shape);
         public abstract double[] GetEquation();
         public abstract double[] GetCoordinates();

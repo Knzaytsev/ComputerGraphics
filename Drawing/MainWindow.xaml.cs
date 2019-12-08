@@ -32,6 +32,8 @@ namespace Drawing
         private double phi = 0;
         private double theta = 0;
         private double zc = 10;
+        private int id = 0;
+        private List<LineData> dataLine = new List<LineData>();
 
         public MainWindow()
         {
@@ -64,12 +66,25 @@ namespace Drawing
 
         private void createLine_Click(object sender, RoutedEventArgs e)
         {
-            canvas.Children.Add(interactor.CreateRandomLine(canvas.Width, canvas.Height, Brushes.Black, 5));
+            var line = interactor.CreateRandomLine(canvas.Width, canvas.Height, Brushes.Black, 5, id);
+            canvas.Children.Add(line);
+            dataLine.Add(new LineData()
+            {
+                Id = id,
+                X1 = line.X1,
+                Y1 = line.Y1,
+                X2 = line.X2,
+                Y2 = line.Y2,
+                Z1 = 0,
+                Z2 = 0,
+                StrokeThickness = line.StrokeThickness
+            });
+            ++id;
         }
 
         private void deleteLine_Click(object sender, RoutedEventArgs e)
         {
-            shape.RemoveAll();
+            shape.RemoveAll(dataLine);
             currentLine = new Line();
             canvas.Children.Add(currentLine);
             shape = new Composite.MainShape(currentLine, coordinateSystem);
@@ -87,17 +102,16 @@ namespace Drawing
                     shape = new Composite.MainShape(currentLine, coordinateSystem);
                 }
 
-                shape.PickAddShape(e.Source as Shape);
+                shape.PickAddShape(e.Source as Shape, dataLine);
 
-                var equation = shape.GetEquation();
-                lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
-
-                var endCoordinates = shape.GetCoordinates();
-
-                endsCoord.Content = "(" + endCoordinates[0] + "; " + endCoordinates[1] + ")\n" +
-                    "(" + endCoordinates[2] + "; " + endCoordinates[3] + ")\n" +
-                    "(" + endCoordinates[4] + "; " + endCoordinates[5] + ")";
+                ShowCoordinates();
             }
+        }
+
+        private void ShowEquation()
+        {
+            var equation = shape.GetEquation().Select(x => Math.Round(x)).ToArray();
+            lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
         }
 
         private void dragElement_MouseMove(object sender, MouseEventArgs e)
@@ -138,13 +152,9 @@ namespace Drawing
         {
             if (e.Source is Shape)
             {
-                var equation = shape.GetEquation();
-                lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
+                ShowEquation();
 
-                var endCoordinates = shape.GetCoordinates();
-                endsCoord.Content = "(" + endCoordinates[0] + "; " + endCoordinates[1] + ")\n" +
-                    "(" + endCoordinates[2] + "; " + endCoordinates[3] + ")\n" +
-                    "(" + endCoordinates[4] + "; " + endCoordinates[5] + ")";
+                ShowCoordinates();
             }
         }
 
@@ -152,12 +162,17 @@ namespace Drawing
         {
             var z1 = double.Parse(addZ1TextBlock.Text);
             var z2 = double.Parse(addZ2TextBlock.Text);
-            shape.AddZ(new double[] { z1, z2 });
+            shape.AddZ(new double[] { z1, z2 }, dataLine);
 
-            var endCoordinates = shape.GetCoordinates();
-            endsCoord.Content = "(" + endCoordinates[0] + "; " + endCoordinates[1] + ")\n" +
-                "(" + endCoordinates[2] + "; " + endCoordinates[3] + ")\n" +
-                "(" + endCoordinates[4] + "; " + endCoordinates[5] + ")";
+            ShowCoordinates();
+        }
+
+        private void ShowCoordinates()
+        {
+            var endCoordinates = shape.GetCoordinates().Select(x => Math.Round(x)).ToArray();
+            endsCoord.Content = 
+                "(" + endCoordinates[0] + "; " + endCoordinates[1] + "; " + endCoordinates[4] + ")\n" +
+                "(" + endCoordinates[2] + "; " + endCoordinates[3] + "; " + endCoordinates[5] + ")";
         }
 
         private void phiSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -172,13 +187,15 @@ namespace Drawing
                 { 0, 0, 0, 1 }
             };
 
-            //shape.ProjectReal3D(rotateMatrix, md.Zc);
-
             shape.ComputeReal3D(rotateMatrix);
 
             shape.ProjectReal3D(md.Zc);
 
             SetValuesDataGrid(rotateMatrix);
+
+            ShowCoordinates();
+
+            shape.SetDataLineCoordinates(dataLine);
         }
 
         private void thetaSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -193,28 +210,21 @@ namespace Drawing
                 { 0, 0, 0, 1 }
             };
 
-            //shape.ProjectReal3D(rotateMatrix, md.Zc);
-
             shape.ComputeReal3D(rotateMatrix);
 
             shape.ProjectReal3D(md.Zc);
 
             SetValuesDataGrid(rotateMatrix);
+
+            ShowCoordinates();
+
+            shape.SetDataLineCoordinates(dataLine);
         }
 
         private void zcSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             zc = Math.Round(e.NewValue) + 10;
             MatrixData md = new MatrixData(0, 0, zc);
-
-            var operation = new double[,]
-            {
-                { 1, 0, 0, 0 },
-                { 0, 1, 0, 0 },
-                { 0, 0, 1, 0 },
-                { 0, 0, 0, 1 }
-            };
-            //shape.ProjectReal3D(operation, md.Zc);
 
             shape.ProjectReal3D(md.Zc);
         }
@@ -237,7 +247,6 @@ namespace Drawing
             for (var i = 0; i < 4; ++i)
             {
                 var row = GetRow(i, matrix);
-                //dgOperationMatrix.Items.Add(row);
                 rows.Add(row);
             }
             dgOperationMatrix.ItemsSource = rows;

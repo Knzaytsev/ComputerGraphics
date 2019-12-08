@@ -161,12 +161,7 @@ namespace Drawing.Composite
             return firstEnd.ToArray();
         }
 
-        public override void PickAddShape(Shape shape)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void RemoveAll()
+        public override void Remove()
         {
             interactor.DeleteShape(shape);
         }

@@ -1,4 +1,5 @@
-﻿using Drawing.Interactors;
+﻿using Drawing.Data;
+using Drawing.Interactors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +24,24 @@ namespace Drawing.Composite
             children.Add(component);
         }
 
-        public override void RemoveAll()
+        public override void Remove()
         {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAll(List<LineData> lines)
+        {
+            var intersectedIdTags = lines.Select(x => x.Id)
+                .Intersect(children.Select(x => (int)(x.Display() as Line).Tag)).ToArray();
+
+            for(var i = 0; i < intersectedIdTags.Length; ++i)
+            {
+                lines.Remove(lines.Where(x => x.Id == intersectedIdTags[i]).First());
+            }
+
             foreach (var c in children)
             {
-                c.RemoveAll();
+                c.Remove();
             }
         }
 
@@ -52,7 +66,7 @@ namespace Drawing.Composite
             }
         }
 
-        public override void PickAddShape(Shape shape)
+        public void PickAddShape(Shape shape, List<LineData> lines)
         {
             if (Contains(shape))
                 return;
@@ -64,6 +78,9 @@ namespace Drawing.Composite
             }
             shape = interactor.PickShape(shape);
             Add(new UnderLine(shape as Line, coordinate));
+
+            var intersect = lines.Where(x => x.Id == (int)(children.Last().Display() as Line).Tag).First();
+            (children.Last() as UnderLine).SetZ(new double[] { intersect.Z1, intersect.Z2 });
         }
 
         public override bool Contains(Shape shape)
@@ -81,12 +98,15 @@ namespace Drawing.Composite
             return children.Last().GetCoordinates();
         }
 
-        public void AddZ(double[] z)
+        public void AddZ(double[] z, List<LineData> lines)
         {
+            var line = lines.Where(x => x.Id == (int)(children.Last().Display() as Line).Tag).First();
+            line.Z1 = z[0];
+            line.Z2 = z[1];
             (children.Last() as UnderLine).SetZ(z);
         }
 
-        public void ProjectReal3D(/*double[,] operation, */double zc)
+        public void ProjectReal3D(double zc)
         {
             var childrenCount = children.Count;
             var data = MakeDataFromLines(childrenCount);
@@ -183,6 +203,25 @@ namespace Drawing.Composite
                 data[i * 2 + 1, 3] = 1;
             }
             return data;
+        }
+
+        internal void SetDataLineCoordinates(List<LineData> lines)
+        {
+            var intersectedIdTags = lines.Select(x => x.Id)
+                    .Intersect(children.Select(x => (int)(x.Display() as Line).Tag)).ToArray();
+
+            foreach(var id in intersectedIdTags)
+            {
+                var lineTag = children.Where(x => (int)(x.Display() as Line).Tag == id).First() as UnderLine;
+                var matrix = lineTag.GetRealMatrix();
+                var lineId = lines.Where(x => x.Id == id).First();
+                lineId.X1 = matrix[0, 0];
+                lineId.Y1 = matrix[0, 1];
+                lineId.Z1 = matrix[0, 2];
+                lineId.X2 = matrix[1, 0];
+                lineId.Y2 = matrix[1, 1];
+                lineId.Z2 = matrix[1, 2];
+            }
         }
     }
 }

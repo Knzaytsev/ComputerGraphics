@@ -15,7 +15,7 @@ namespace Drawing.Interactors
     {
         private Random rnd = new Random();
 
-        public Line CreateRandomLine(double width, double height, SolidColorBrush brush, int thickness)
+        public Line CreateRandomLine(double width, double height, SolidColorBrush brush, int thickness, int id)
         {
             var firstPoint = GetPoint(width, height);
             var secondPoint = GetPoint(width, height);
@@ -26,7 +26,8 @@ namespace Drawing.Interactors
                 X2 = secondPoint.X,
                 Y2 = secondPoint.Y,
                 Stroke = brush,
-                StrokeThickness = thickness
+                StrokeThickness = thickness,
+                Tag = id
             };
         }
 
