@@ -31,6 +31,32 @@ namespace Drawing.Interactors
             };
         }
 
+        public Line CreateMedian(Point point, Line line, int id)
+        {
+            var x1 = (line.X1 + line.X2) / 2;
+            var y1 = (line.Y1 + line.Y2) / 2;
+            return new Line()
+            {
+                X1 = x1,
+                Y1 = y1,
+                X2 = point.X,
+                Y2 = point.Y,
+                Stroke = Brushes.Black,
+                StrokeThickness = 5,
+                Tag = id
+            };
+        }
+
+        /*public Line CreateHeight(Point point)
+        {
+
+        }
+
+        public Line CreateBiss()
+        {
+
+        }*/
+
         public override void DeleteShape(Shape line)
         {
             ((Canvas)line.Parent).Children.Remove(line);

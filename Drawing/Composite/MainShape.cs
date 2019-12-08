@@ -24,6 +24,11 @@ namespace Drawing.Composite
             children.Add(component);
         }
 
+        public Shape GetLastShape()
+        {
+            return children.Last().Display();
+        }
+
         public override void Remove()
         {
             throw new NotImplementedException();
@@ -135,26 +140,6 @@ namespace Drawing.Composite
                 line.X2 += newPoint2[0] - line.X2;
                 line.Y2 += newPoint2[1] - line.Y2;
             }
-            /*cm.ComputeMatrix();
-            //cm.AddOperation(cm.GetNonNormalizedResult());
-            cm.AddOperation(cm.GetResult());
-            cm.AddData(data);
-            cm.ComputeMatrix();
-
-
-            var result = cm.GetResult();
-
-            for (var i = 0; i < childrenCount; ++i)
-            {
-                var line = children[i].Display() as Line;
-                var newPoint1 = coordinate.ToNormalCoordinates(new Point(result[i * 2, 0], result[i * 2, 1]));
-                var newPoint2 = coordinate.ToNormalCoordinates(new Point(result[i * 2 + 1, 0], result[i * 2 + 1, 1]));
-
-                line.X1 += newPoint1[0] - line.X1;
-                line.Y1 += newPoint1[1] - line.Y1;
-                line.X2 += newPoint2[0] - line.X2;
-                line.Y2 += newPoint2[1] - line.Y2;
-            }*/
         }
 
         public void ComputeReal3D(double[,] operation)

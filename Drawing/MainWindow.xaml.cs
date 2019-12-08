@@ -34,6 +34,8 @@ namespace Drawing
         private double zc = 10;
         private int id = 0;
         private List<LineData> dataLine = new List<LineData>();
+        private bool median = false;
+        private bool height = false;
 
         public MainWindow()
         {
@@ -92,6 +94,30 @@ namespace Drawing
 
         private void pickElement_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (median)
+            {
+                var line = shape.GetLastShape() as Line;
+                var medianLine = interactor.CreateMedian(e.GetPosition(canvas), line, id);
+                canvas.Children.Add(medianLine);
+                dataLine.Add(new LineData
+                {
+                    Id = id,
+                    X1 = medianLine.X1,
+                    Y1 = medianLine.Y1,
+                    Z1 = 0,
+                    X2 = medianLine.X2,
+                    Y2 = medianLine.Y2,
+                    Z2 = 0,
+                    StrokeThickness = medianLine.StrokeThickness
+                });
+                ++id;
+                median = false;
+            }
+            else if (height)
+            {
+
+            }
+
             if (e.Source is Shape)
             {
                 if (!downed)
@@ -274,6 +300,18 @@ namespace Drawing
         private void KeyUpZ2(object sender, KeyEventArgs e)
         {
             ActivateDoZ();
+        }
+
+        private void createMedian_Click(object sender, RoutedEventArgs e)
+        {
+            median = true;
+            height = false;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            height = true;
+            median = false;
         }
     }
 }
