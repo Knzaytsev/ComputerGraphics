@@ -31,6 +31,7 @@ namespace Drawing
         private Point oldPoint;
         private double phi = 0;
         private double theta = 0;
+        private double gamma = 0;
         private double zc = 10;
         private int id = 0;
         private List<LineData> dataLine = new List<LineData>();
@@ -203,13 +204,22 @@ namespace Drawing
 
         private void phiSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            phi = Math.Round(e.NewValue);
-            var md = new MatrixData(phi, 0, zc);
+            phi = Math.Round(e.NewValue) * 0.1;
+            /*var md = new MatrixData(phi, 0, zc);
             var rotateMatrix = new double[,]
             {
                 { 1, 0, 0, 0},
                 { 0, md.CosPhi, md.SinPhi, 0 },
                 { 0, -md.SinPhi, md.CosPhi, 0 },
+                { 0, 0, 0, 1 }
+            };*/
+
+            var md = new MatrixData(phi, zc);
+            var rotateMatrix = new double[,]
+            {
+                { 1, 0, 0, 0},
+                { 0, md.Cos, md.Sin, 0 },
+                { 0, -md.Sin, md.Cos, 0 },
                 { 0, 0, 0, 1 }
             };
 
@@ -226,17 +236,25 @@ namespace Drawing
 
         private void thetaSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            theta = Math.Round(e.NewValue);
-            var md = new MatrixData(0, theta, zc);
+            theta = Math.Round(e.NewValue) * 0.1;
+            /*var md = new MatrixData(0, theta, zc);
             var rotateMatrix = new double[,]
             {
                 { md.CosTheta, 0, -md.SinTheta, 0},
                 { 0, 1, 0, 0 },
                 { md.SinTheta, 0,  md.CosTheta, 0 },
                 { 0, 0, 0, 1 }
+            };*/
+            var md = new MatrixData(theta, zc);
+            var rotateMatrix = new double[,]
+            {
+                { md.Cos, 0, -md.Sin, 0},
+                { 0, 1, 0, 0 },
+                { md.Sin, 0,  md.Cos, 0 },
+                { 0, 0, 0, 1 }
             };
 
-            shape.ComputeReal3D(rotateMatrix);
+             shape.ComputeReal3D(rotateMatrix);
 
             shape.ProjectReal3D(md.Zc);
 
@@ -249,8 +267,8 @@ namespace Drawing
 
         private void zcSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            zc = Math.Round(e.NewValue) + 10;
-            MatrixData md = new MatrixData(0, 0, zc);
+            zc = Math.Round(e.NewValue) * 10;
+            MatrixData md = new MatrixData(0, zc);
 
             shape.ProjectReal3D(md.Zc);
         }
@@ -312,6 +330,37 @@ namespace Drawing
         {
             height = true;
             median = false;
+        }
+
+        private void gammaSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            gamma = Math.Round(e.NewValue) * 0.1;
+            /*var md = new MatrixData(phi, 0, zc);
+            var rotateMatrix = new double[,]
+            {
+                { 1, 0, 0, 0},
+                { 0, md.CosPhi, md.SinPhi, 0 },
+                { 0, -md.SinPhi, md.CosPhi, 0 },
+                { 0, 0, 0, 1 }
+            };*/
+            var md = new MatrixData(gamma, zc);
+            var rotateMatrix = new double[,]
+            {
+                { md.Cos, md.Sin, 0, 0},
+                { -md.Sin, md.Cos, 0, 0 },
+                { 0, 0, 1, 0 },
+                { 0, 0, 0, 1 }
+            };
+
+            shape.ComputeReal3D(rotateMatrix);
+
+            shape.ProjectReal3D(md.Zc);
+
+            SetValuesDataGrid(rotateMatrix);
+
+            ShowCoordinates();
+
+            shape.SetDataLineCoordinates(dataLine);
         }
     }
 }

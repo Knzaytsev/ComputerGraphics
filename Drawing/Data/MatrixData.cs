@@ -8,44 +8,25 @@ namespace Drawing.Data
 {
     class MatrixData
     {
-        private double phi;
-        private double theta;
+        private double angle;
         private double zc;
 
-        public double SinPhi
+        public double Sin
         {
             get
             {
-                return MakeSin(phi);
+                return MakeSin(angle);
             }
-            set { phi = value; }
+            set { angle = value; }
         }
 
-        public double SinTheta
+        public double Cos
         {
             get
             {
-                return MakeSin(theta);
+                return MakeCos(angle);
             }
-            set { theta = value; }
-        }
-
-        public double CosPhi
-        {
-            get
-            {
-                return MakeCos(phi);
-            }
-            set { phi = value; }
-        }
-
-        public double CosTheta
-        {
-            get
-            {
-                return MakeCos(theta);
-            }
-            set { theta = value; }
+            set { angle = value; }
         }
 
         public double Zc
@@ -54,10 +35,9 @@ namespace Drawing.Data
             set { zc = value; }
         }
 
-        public MatrixData(double phi, double theta, double zc)
+        public MatrixData(double angle, double zc)
         {
-            this.phi = phi;
-            this.theta = theta;
+            this.angle = angle;
             this.zc = zc;
         }
 
