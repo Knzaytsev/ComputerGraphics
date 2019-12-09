@@ -116,7 +116,22 @@ namespace Drawing
             }
             else if (height)
             {
-
+                var line = shape.GetLastShape() as Line;
+                var heightLine = interactor.CreateHeight(e.GetPosition(canvas), line, id);
+                canvas.Children.Add(heightLine);
+                dataLine.Add(new LineData
+                {
+                    Id = id,
+                    X1 = heightLine.X1,
+                    Y1 = heightLine.Y1,
+                    Z1 = 0,
+                    X2 = heightLine.X2,
+                    Y2 = heightLine.Y2,
+                    Z2 = 0,
+                    StrokeThickness = heightLine.StrokeThickness
+                });
+                ++id;
+                height = false;
             }
 
             if (e.Source is Shape)

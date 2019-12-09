@@ -47,12 +47,32 @@ namespace Drawing.Interactors
             };
         }
 
-        /*public Line CreateHeight(Point point)
+        public Line CreateHeight(Point point, Line line, int id)
         {
+            var A1 = line.Y1 - line.Y2;
+            var B1 = line.X2 - line.X1;
+            var C1 = line.X1 * line.Y2 - line.X2 * line.Y1;
 
+            var A2 = -B1;
+            var B2 = A1;
+            var C2 = B1 * point.X - A1 * point.Y;
+
+            var x = (B1 * C2 - B2 * C1) / (A1 * B2 - A2 * B1);
+            var y = (A2 * C1 - A1 * C2) / (A1 * B2 - A2 * B1);
+
+            return new Line()
+            {
+                X1 = x,
+                Y1 = y,
+                X2 = point.X,
+                Y2 = point.Y,
+                Stroke = Brushes.Black,
+                StrokeThickness = 5,
+                Tag = id
+            };
         }
 
-        public Line CreateBiss()
+        /*public Line CreateBiss()
         {
 
         }*/
