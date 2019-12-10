@@ -219,15 +219,7 @@ namespace Drawing
 
         private void phiSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            phi = Math.Round(e.NewValue) * 0.1;
-            /*var md = new MatrixData(phi, 0, zc);
-            var rotateMatrix = new double[,]
-            {
-                { 1, 0, 0, 0},
-                { 0, md.CosPhi, md.SinPhi, 0 },
-                { 0, -md.SinPhi, md.CosPhi, 0 },
-                { 0, 0, 0, 1 }
-            };*/
+            var phi = Math.Round(e.NewValue - e.OldValue);
 
             var md = new MatrixData(phi, zc);
             var rotateMatrix = new double[,]
@@ -238,28 +230,13 @@ namespace Drawing
                 { 0, 0, 0, 1 }
             };
 
-            shape.ComputeReal3D(rotateMatrix);
-
-            shape.ProjectReal3D(md.Zc);
-
-            SetValuesDataGrid(rotateMatrix);
-
-            ShowCoordinates();
-
-            shape.SetDataLineCoordinates(dataLine);
+            Compute3DOperation(rotateMatrix, md.Zc);
         }
 
         private void thetaSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            theta = Math.Round(e.NewValue) * 0.1;
-            /*var md = new MatrixData(0, theta, zc);
-            var rotateMatrix = new double[,]
-            {
-                { md.CosTheta, 0, -md.SinTheta, 0},
-                { 0, 1, 0, 0 },
-                { md.SinTheta, 0,  md.CosTheta, 0 },
-                { 0, 0, 0, 1 }
-            };*/
+            var theta = Math.Round(e.NewValue - e.OldValue);
+
             var md = new MatrixData(theta, zc);
             var rotateMatrix = new double[,]
             {
@@ -269,15 +246,7 @@ namespace Drawing
                 { 0, 0, 0, 1 }
             };
 
-             shape.ComputeReal3D(rotateMatrix);
-
-            shape.ProjectReal3D(md.Zc);
-
-            SetValuesDataGrid(rotateMatrix);
-
-            ShowCoordinates();
-
-            shape.SetDataLineCoordinates(dataLine);
+            Compute3DOperation(rotateMatrix, md.Zc);
         }
 
         private void zcSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -308,7 +277,7 @@ namespace Drawing
                 var row = GetRow(i, matrix);
                 rows.Add(row);
             }
-            dgOperationMatrix.ItemsSource = rows;
+            //dgOperationMatrix.ItemsSource = rows;
         }
 
         private void KeyUpZ1(object sender, KeyEventArgs e)
@@ -349,15 +318,8 @@ namespace Drawing
 
         private void gammaSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            gamma = Math.Round(e.NewValue) * 0.1;
-            /*var md = new MatrixData(phi, 0, zc);
-            var rotateMatrix = new double[,]
-            {
-                { 1, 0, 0, 0},
-                { 0, md.CosPhi, md.SinPhi, 0 },
-                { 0, -md.SinPhi, md.CosPhi, 0 },
-                { 0, 0, 0, 1 }
-            };*/
+            var gamma = Math.Round(e.NewValue - e.OldValue);
+
             var md = new MatrixData(gamma, zc);
             var rotateMatrix = new double[,]
             {
@@ -367,15 +329,70 @@ namespace Drawing
                 { 0, 0, 0, 1 }
             };
 
-            shape.ComputeReal3D(rotateMatrix);
+            Compute3DOperation(rotateMatrix, md.Zc);
+        }
 
-            shape.ProjectReal3D(md.Zc);
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
 
-            SetValuesDataGrid(rotateMatrix);
+        }
+
+        private void xTransportSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var m = Math.Round(e.NewValue * 10 - e.OldValue * 10);
+
+            var transportMatrix = new double[,]
+            {
+                {1, 0, 0, 0 },
+                {0, 1, 0, 0 },
+                {0, 0, 1, 0 },
+                {m, 0, 0, 1 }
+            };
+
+            Compute3DOperation(transportMatrix, zc);
+        }
+
+        private void yTransportSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var n = Math.Round(e.NewValue * 10 - e.OldValue * 10);
+
+            var transportMatrix = new double[,]
+            {
+                {1, 0, 0, 0 },
+                {0, 1, 0, 0 },
+                {0, 0, 1, 0 },
+                {0, n, 0, 1 }
+            };
+
+            Compute3DOperation(transportMatrix, zc);
+        }
+
+        private void Compute3DOperation(double[,] operation, double zc)
+        {
+            shape.ComputeReal3D(operation);
+
+            shape.ProjectReal3D(zc);
+
+            SetValuesDataGrid(operation);
 
             ShowCoordinates();
 
             shape.SetDataLineCoordinates(dataLine);
+        }
+
+        private void zTransportSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var k = Math.Round(e.NewValue * 10 - e.OldValue * 10);
+
+            var transportMatrix = new double[,]
+            {
+                {1, 0, 0, 0 },
+                {0, 1, 0, 0 },
+                {0, 0, 1, 0 },
+                {0, 0, k, 1 }
+            };
+
+            Compute3DOperation(transportMatrix, zc);
         }
     }
 }

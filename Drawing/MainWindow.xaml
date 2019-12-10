@@ -5,36 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Drawing"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1039">
+        Title="MainWindow" Height="720" Width="1280">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="810*"/>
-            <ColumnDefinition Width="221*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
         <TextBox x:Name="addZ1TextBlock" HorizontalAlignment="Left" Height="20" Margin="698,271,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="74" KeyUp="KeyUpZ1"/>
 
         <Button x:Name="createLine" Content="Создать" Click="createLine_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="697,20,0,0" Height="37" Width="62"/>
         <Button x:Name="deleteLine" Content="Удалить" Click="deleteLine_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="697,62,0,0" Height="37" Width="62"/>
-        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="680"  Margin="0,0,0,-1"/>
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="691"/>
         <Label x:Name="mousePosition" Content="Позиция" HorizontalAlignment="Left" Margin="696,152,0,0" VerticalAlignment="Top" Height="26" Width="58"/>
         <Button x:Name="coordinateSystem_Button" Content="СК" HorizontalAlignment="Left" Margin="697,104,0,0" VerticalAlignment="Top" Width="62" Height="40" Click="coordinateSystem_Button_Click"/>
-        <Label x:Name="lineEquation" Content="Ур-е" HorizontalAlignment="Left" Margin="697,243,0,0" VerticalAlignment="Top" Height="27" Width="103"/>
-        <Label x:Name="endsCoord" Content="Концы линии" HorizontalAlignment="Left" Margin="697,178,0,0" VerticalAlignment="Top" Height="65" Width="103"/>
-        <DataGrid x:Name="dgOperationMatrix" HorizontalAlignment="Left" Height="124" Margin="10,20,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" AreRowDetailsFrozen="True">
-        </DataGrid>
-        <Button x:Name="doZ" Content="Добавить Z" Margin="698,321,38,0" VerticalAlignment="Top" Click="doZ_Click"/>
-        <Slider x:Name="phiSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,178,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="phiSlider_ValueChanged"/>
-        <Slider x:Name="thetaSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,232,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="thetaSlider_ValueChanged"/>
+        <Label x:Name="lineEquation" Content="Ур-е" HorizontalAlignment="Left" Margin="697,250,0,0" VerticalAlignment="Top" Height="27" Width="103"/>
+        <Label x:Name="endsCoord" Content="Концы линии" HorizontalAlignment="Left" Margin="697,185,0,0" VerticalAlignment="Top" Height="65" Width="101"/>
+        <Button x:Name="doZ" Content="Добавить Z" Margin="698,321,500,0" VerticalAlignment="Top" Click="doZ_Click" Height="20"/>
+        <Slider x:Name="phiSlider" HorizontalAlignment="Left" Margin="1038,38,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="phiSlider_ValueChanged" Height="18"/>
+        <Slider x:Name="thetaSlider" HorizontalAlignment="Left" Margin="1038,92,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="thetaSlider_ValueChanged" Height="18"/>
         <TextBox x:Name="addZ2TextBlock" HorizontalAlignment="Left" Height="20" Margin="698,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="74" KeyUp="KeyUpZ2"/>
-        <Slider x:Name="zcSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="10,338,0,0" VerticalAlignment="Top" Width="200" Minimum="0" Maximum="100" SmallChange="1" ValueChanged="zcSlider_ValueChanged"/>
-        <Button x:Name="createMedian" Content="Создать &#xD;&#xA;медиану" Grid.Column="1" HorizontalAlignment="Left" Margin="10,373,0,0" VerticalAlignment="Top" Width="75" Click="createMedian_Click"/>
-        <Button x:Name="createHeight" Content="Создать&#xD;&#xA;высоту" Grid.Column="1" HorizontalAlignment="Left" Margin="90,373,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <Label Content="Вращение по оси Х" Grid.Column="1" HorizontalAlignment="Left" Margin="10,152,0,0" VerticalAlignment="Top"/>
-        <Label Content="Вращение по оси Y" Grid.Column="1" HorizontalAlignment="Left" Margin="10,201,0,0" VerticalAlignment="Top"/>
-        <Slider x:Name="gammaSlider" Minimum="0" Maximum="360" Grid.Column="1" HorizontalAlignment="Left" SmallChange="1" Margin="10,284,0,0" VerticalAlignment="Top" Width="200" ValueChanged="gammaSlider_ValueChanged"/>
-        <Label Content="Вращение по оси Z" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,255,0,0" Grid.Column="1"/>
-        <Label Content="Изменение точки схода" Grid.Column="1" HorizontalAlignment="Left" Margin="10,307,0,0" VerticalAlignment="Top"/>
+        <Slider x:Name="zcSlider" HorizontalAlignment="Left" Margin="1038,198,0,0" VerticalAlignment="Top" Width="200" Minimum="0" Maximum="100" SmallChange="1" ValueChanged="zcSlider_ValueChanged" Height="18"/>
+        <Button x:Name="createMedian" Content="Создать &#xD;&#xA;медиану" HorizontalAlignment="Left" Margin="804,185,0,0" VerticalAlignment="Top" Width="75" Click="createMedian_Click" Height="36"/>
+        <Button x:Name="createHeight" Content="Создать&#xD;&#xA;высоту" HorizontalAlignment="Left" Margin="928,185,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Height="36"/>
+        <Label Content="Вращение по оси Х" HorizontalAlignment="Left" Margin="1038,7,0,0" VerticalAlignment="Top" Height="26" Width="116"/>
+        <Label Content="Вращение по оси Y" HorizontalAlignment="Left" Margin="1038,61,0,0" VerticalAlignment="Top" Height="26" Width="116"/>
+        <Slider x:Name="gammaSlider" Minimum="0" Maximum="360" HorizontalAlignment="Left" SmallChange="1" Margin="1038,144,0,0" VerticalAlignment="Top" Width="200" ValueChanged="gammaSlider_ValueChanged" Height="18"/>
+        <Label Content="Вращение по оси Z" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1038,115,0,0" Height="26" Width="116"/>
+        <Label Content="Изменение точки схода" HorizontalAlignment="Left" Margin="1038,167,0,0" VerticalAlignment="Top" Height="26" Width="140"/>
+        <Button x:Name="SaveButton" Content="Сохранить" HorizontalAlignment="Left" Margin="698,358,0,0" VerticalAlignment="Top" Width="74" Click="SaveButton_Click" Height="20"/>
+        <Button x:Name="LoadButton" Content="Загрузить" HorizontalAlignment="Left" Margin="698,383,0,0" VerticalAlignment="Top" Width="74" Height="20"/>
+        <Slider x:Name="xTransportSlider" HorizontalAlignment="Left" Margin="803,39,0,0" VerticalAlignment="Top" Width="200" Height="18" ValueChanged="xTransportSlider_ValueChanged"/>
+        <Label Content="Перемещение по оси X" HorizontalAlignment="Left" Margin="804,8,0,0" VerticalAlignment="Top" Height="26" Width="140"/>
+        <Slider x:Name="yTransportSlider" HorizontalAlignment="Left" Margin="803,95,0,0" VerticalAlignment="Top" Width="200" ValueChanged="yTransportSlider_ValueChanged" Height="18"/>
+        <Label Content="Перемещение по оси Y" HorizontalAlignment="Left" Margin="803,64,0,0" VerticalAlignment="Top" Height="26" Width="139"/>
+        <Slider x:Name="zTransportSlider" HorizontalAlignment="Left" Margin="803,149,0,0" VerticalAlignment="Top" Width="200" ValueChanged="zTransportSlider_ValueChanged"/>
+        <Label Content="Перемещение по оси Z" HorizontalAlignment="Left" Margin="803,118,0,0" VerticalAlignment="Top" Height="26" Width="139"/>
 
     </Grid>
 </Window>
