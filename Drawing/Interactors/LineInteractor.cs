@@ -72,10 +72,40 @@ namespace Drawing.Interactors
             };
         }
 
-        /*public Line CreateBiss()
+        public Line CreateBiss(Line line1, Line line2, int id)
         {
+            var A1 = line1.Y1 - line1.Y2;
+            var B1 = line1.X2 - line1.X1;
+            var C1 = line1.X1 * line1.Y2 - line1.X2 * line1.Y1;
 
-        }*/
+            var A2 = line2.Y1 - line2.Y2;
+            var B2 = line2.X2 - line2.X1;
+            var C2 = line2.X1 * line2.Y2 - line2.X2 * line2.Y1;
+
+            var AB1 = Math.Sqrt(A1 * A1 + B1 * B1);
+            var AB2 = Math.Sqrt(A2 * A2 + B2 * B2);
+
+            var A = A1 * AB2 - A2 * AB1;
+            var B = B1 * AB2 - B2 * AB1;
+            var C = C1 * AB2 - C2 * AB1;
+
+            var x1 = (B1 * C2 - B2 * C1) / (A1 * B2 - A2 * B1);
+            var y1 = (A2 * C1 - A1 * C2) / (A1 * B2 - A2 * B1);
+
+            var x2 = 500;
+            var y2 = (-A * x2 - C) / B;
+
+            return new Line()
+            {
+                X1 = x1,
+                Y1 = y1,
+                X2 = x2,
+                Y2 = y2,
+                Stroke = Brushes.Black,
+                StrokeThickness = 5,
+                Tag = id
+            };
+        }
 
         public override void DeleteShape(Shape line)
         {

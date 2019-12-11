@@ -23,16 +23,16 @@
         <Label x:Name="endsCoord" Content="Концы линии" HorizontalAlignment="Left" Margin="697,185,0,0" VerticalAlignment="Top" Height="65" Width="101"/>
         <Button x:Name="doZ" Content="Добавить Z" Margin="698,321,500,0" VerticalAlignment="Top" Click="doZ_Click" Height="20"/>
         <Slider x:Name="phiSlider" HorizontalAlignment="Left" Margin="1038,38,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="phiSlider_ValueChanged" Height="18"/>
-        <Slider x:Name="thetaSlider" HorizontalAlignment="Left" Margin="1038,92,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="thetaSlider_ValueChanged" Height="18"/>
+        <Slider x:Name="thetaSlider" HorizontalAlignment="Left" Margin="1038,107,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="thetaSlider_ValueChanged" Height="18"/>
         <TextBox x:Name="addZ2TextBlock" HorizontalAlignment="Left" Height="20" Margin="698,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="74" KeyUp="KeyUpZ2"/>
-        <Slider x:Name="zcSlider" HorizontalAlignment="Left" Margin="1038,198,0,0" VerticalAlignment="Top" Width="200" Minimum="0" Maximum="100" SmallChange="1" ValueChanged="zcSlider_ValueChanged" Height="18"/>
-        <Button x:Name="createMedian" Content="Создать &#xD;&#xA;медиану" HorizontalAlignment="Left" Margin="884,388,0,0" VerticalAlignment="Top" Width="75" Click="createMedian_Click" Height="36"/>
-        <Button x:Name="createHeight" Content="Создать&#xD;&#xA;высоту" HorizontalAlignment="Left" Margin="997,388,0,0" VerticalAlignment="Top" Width="74" Click="Button_Click" Height="36"/>
+        <Slider x:Name="zcSlider" HorizontalAlignment="Left" Margin="1038,255,0,0" VerticalAlignment="Top" Width="200" Minimum="0" Maximum="100" SmallChange="1" ValueChanged="zcSlider_ValueChanged" Height="18"/>
+        <Button x:Name="createMedian" Content="Создать &#xD;&#xA;медиану" HorizontalAlignment="Left" Margin="785,306,0,0" VerticalAlignment="Top" Width="75" Click="createMedian_Click" Height="36"/>
+        <Button x:Name="createHeight" Content="Создать&#xD;&#xA;высоту" HorizontalAlignment="Left" Margin="877,306,0,0" VerticalAlignment="Top" Width="75" Click="CreateHeight_Click" Height="36"/>
         <Label Content="Вращение по оси Х" HorizontalAlignment="Left" Margin="1038,7,0,0" VerticalAlignment="Top" Height="26" Width="116"/>
-        <Label Content="Вращение по оси Y" HorizontalAlignment="Left" Margin="1038,61,0,0" VerticalAlignment="Top" Height="26" Width="116"/>
-        <Slider x:Name="gammaSlider" Minimum="0" Maximum="360" HorizontalAlignment="Left" SmallChange="1" Margin="1038,144,0,0" VerticalAlignment="Top" Width="200" ValueChanged="gammaSlider_ValueChanged" Height="18"/>
-        <Label Content="Вращение по оси Z" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1038,115,0,0" Height="26" Width="116"/>
-        <Label Content="Изменение точки схода" HorizontalAlignment="Left" Margin="1038,167,0,0" VerticalAlignment="Top" Height="26" Width="140"/>
+        <Label Content="Вращение по оси Y" HorizontalAlignment="Left" Margin="1038,76,0,0" VerticalAlignment="Top" Height="26" Width="116"/>
+        <Slider x:Name="gammaSlider" Minimum="0" Maximum="360" HorizontalAlignment="Left" SmallChange="1" Margin="1038,181,0,0" VerticalAlignment="Top" Width="200" ValueChanged="gammaSlider_ValueChanged" Height="18"/>
+        <Label Content="Вращение по оси Z" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1038,152,0,0" Height="26" Width="116"/>
+        <Label Content="Изменение точки схода" HorizontalAlignment="Left" Margin="1038,224,0,0" VerticalAlignment="Top" Height="26" Width="140"/>
         <Button x:Name="SaveButton" Content="Сохранить" HorizontalAlignment="Left" Margin="698,358,0,0" VerticalAlignment="Top" Width="74" Click="SaveButton_Click" Height="20"/>
         <Button x:Name="LoadButton" Content="Загрузить" HorizontalAlignment="Left" Margin="698,383,0,0" VerticalAlignment="Top" Width="74" Height="20"/>
         <TextBox x:Name="aScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="811,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"/>
@@ -53,6 +53,7 @@
         <Button x:Name="MirrorZButton" Content="z" HorizontalAlignment="Left" Margin="811,229,0,0" VerticalAlignment="Top" Width="50" Height="41" Click="MirrorZButton_Click"/>
         <Button x:Name="MirrorX0Button" Content="x = 0" HorizontalAlignment="Left" Margin="871,229,0,0" VerticalAlignment="Top" Width="50" Height="41" Click="MirrorX0Button_Click"/>
         <Button x:Name="MirrorStartButton" Content="Начало &#xD;&#xA;координат" HorizontalAlignment="Left" Margin="928,229,0,0" VerticalAlignment="Top" Width="75" Height="41" Click="MirrorStartButton_Click"/>
+        <Button x:Name="CreateBiss" Content="Создать&#xD;&#xA;биссектрису" HorizontalAlignment="Left" Margin="968,306,0,0" VerticalAlignment="Top" Width="75" Click="CreateBiss_Click"/>
 
     </Grid>
 </Window>

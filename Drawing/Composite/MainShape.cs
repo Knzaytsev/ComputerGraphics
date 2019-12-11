@@ -208,5 +208,10 @@ namespace Drawing.Composite
                 lineId.Z2 = matrix[1, 2];
             }
         }
+
+        public List<Shape> GetShapes()
+        {
+            return children.Select(x => x.Display()).ToList();
+        }
     }
 }

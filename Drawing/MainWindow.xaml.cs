@@ -310,10 +310,31 @@ namespace Drawing
             height = false;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CreateHeight_Click(object sender, RoutedEventArgs e)
         {
             height = true;
             median = false;
+        }
+
+        private void CreateBiss_Click(object sender, RoutedEventArgs e)
+        {
+            var lines = shape.GetShapes();
+            if (lines.Count != 2)
+                return;
+            var biss = interactor.CreateBiss(lines[0] as Line, lines[1] as Line, id);
+            canvas.Children.Add(biss);
+            dataLine.Add(new LineData()
+            {
+                Id = id,
+                X1 = biss.X1,
+                Y1 = biss.Y1,
+                X2 = biss.X2,
+                Y2 = biss.Y2,
+                Z1 = 0,
+                Z2 = 0,
+                StrokeThickness = biss.StrokeThickness
+            });
+            ++id;
         }
 
         private void gammaSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
