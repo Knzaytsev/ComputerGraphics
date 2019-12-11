@@ -26,8 +26,8 @@
         <Slider x:Name="thetaSlider" HorizontalAlignment="Left" Margin="1038,92,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="thetaSlider_ValueChanged" Height="18"/>
         <TextBox x:Name="addZ2TextBlock" HorizontalAlignment="Left" Height="20" Margin="698,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="74" KeyUp="KeyUpZ2"/>
         <Slider x:Name="zcSlider" HorizontalAlignment="Left" Margin="1038,198,0,0" VerticalAlignment="Top" Width="200" Minimum="0" Maximum="100" SmallChange="1" ValueChanged="zcSlider_ValueChanged" Height="18"/>
-        <Button x:Name="createMedian" Content="Создать &#xD;&#xA;медиану" HorizontalAlignment="Left" Margin="804,185,0,0" VerticalAlignment="Top" Width="75" Click="createMedian_Click" Height="36"/>
-        <Button x:Name="createHeight" Content="Создать&#xD;&#xA;высоту" HorizontalAlignment="Left" Margin="928,185,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Height="36"/>
+        <Button x:Name="createMedian" Content="Создать &#xD;&#xA;медиану" HorizontalAlignment="Left" Margin="884,388,0,0" VerticalAlignment="Top" Width="75" Click="createMedian_Click" Height="36"/>
+        <Button x:Name="createHeight" Content="Создать&#xD;&#xA;высоту" HorizontalAlignment="Left" Margin="997,388,0,0" VerticalAlignment="Top" Width="74" Click="Button_Click" Height="36"/>
         <Label Content="Вращение по оси Х" HorizontalAlignment="Left" Margin="1038,7,0,0" VerticalAlignment="Top" Height="26" Width="116"/>
         <Label Content="Вращение по оси Y" HorizontalAlignment="Left" Margin="1038,61,0,0" VerticalAlignment="Top" Height="26" Width="116"/>
         <Slider x:Name="gammaSlider" Minimum="0" Maximum="360" HorizontalAlignment="Left" SmallChange="1" Margin="1038,144,0,0" VerticalAlignment="Top" Width="200" ValueChanged="gammaSlider_ValueChanged" Height="18"/>
@@ -35,12 +35,24 @@
         <Label Content="Изменение точки схода" HorizontalAlignment="Left" Margin="1038,167,0,0" VerticalAlignment="Top" Height="26" Width="140"/>
         <Button x:Name="SaveButton" Content="Сохранить" HorizontalAlignment="Left" Margin="698,358,0,0" VerticalAlignment="Top" Width="74" Click="SaveButton_Click" Height="20"/>
         <Button x:Name="LoadButton" Content="Загрузить" HorizontalAlignment="Left" Margin="698,383,0,0" VerticalAlignment="Top" Width="74" Height="20"/>
-        <Slider x:Name="xTransportSlider" HorizontalAlignment="Left" Margin="803,39,0,0" VerticalAlignment="Top" Width="200" Height="18" ValueChanged="xTransportSlider_ValueChanged"/>
-        <Label Content="Перемещение по оси X" HorizontalAlignment="Left" Margin="804,8,0,0" VerticalAlignment="Top" Height="26" Width="140"/>
-        <Slider x:Name="yTransportSlider" HorizontalAlignment="Left" Margin="803,95,0,0" VerticalAlignment="Top" Width="200" ValueChanged="yTransportSlider_ValueChanged" Height="18"/>
-        <Label Content="Перемещение по оси Y" HorizontalAlignment="Left" Margin="803,64,0,0" VerticalAlignment="Top" Height="26" Width="139"/>
-        <Slider x:Name="zTransportSlider" HorizontalAlignment="Left" Margin="803,149,0,0" VerticalAlignment="Top" Width="200" ValueChanged="zTransportSlider_ValueChanged"/>
-        <Label Content="Перемещение по оси Z" HorizontalAlignment="Left" Margin="803,118,0,0" VerticalAlignment="Top" Height="26" Width="139"/>
+        <TextBox x:Name="aScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="811,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"/>
+        <Label Content="a" HorizontalAlignment="Left" Margin="811,15,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="dScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="871,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"/>
+        <Label Content="d" HorizontalAlignment="Left" Margin="871,15,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="eScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="928,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"/>
+        <Label Content="e" HorizontalAlignment="Left" Margin="928,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="4.235,0.5"/>
+        <Button x:Name="ScaleButton" Content="Масштабировать" HorizontalAlignment="Left" Margin="839,74,0,0" VerticalAlignment="Top" Width="114" Click="ScaleButton_Click"/>
+        <TextBox x:Name="xTransportTextBox" HorizontalAlignment="Left" Height="23" Margin="811,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"/>
+        <Label Content="x" HorizontalAlignment="Left" Margin="811,99,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="yTransportTextBox" HorizontalAlignment="Left" Height="23" Margin="871,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"/>
+        <Label Content="y" HorizontalAlignment="Left" Margin="871,99,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="zTransportTextBox" HorizontalAlignment="Left" Height="23" Margin="928,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"/>
+        <Label Content="z" HorizontalAlignment="Left" Margin="928,99,0,0" VerticalAlignment="Top" RenderTransformOrigin="4.235,0.5"/>
+        <Button x:Name="TransportButton" Content="Переместить" HorizontalAlignment="Left" Margin="839,158,0,0" VerticalAlignment="Top" Width="114" Click="TransportButton_Click"/>
+        <Label Content="Зеркалирование относительно" HorizontalAlignment="Left" Margin="811,198,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="MirrorZButton" Content="z" HorizontalAlignment="Left" Margin="811,229,0,0" VerticalAlignment="Top" Width="50" Height="41" Click="MirrorZButton_Click"/>
+        <Button x:Name="MirrorX0Button" Content="x = 0" HorizontalAlignment="Left" Margin="871,229,0,0" VerticalAlignment="Top" Width="50" Height="41" Click="MirrorX0Button_Click"/>
+        <Button x:Name="MirrorStartButton" Content="Начало &#xD;&#xA;координат" HorizontalAlignment="Left" Margin="928,229,0,0" VerticalAlignment="Top" Width="75" Height="41" Click="MirrorStartButton_Click"/>
 
     </Grid>
 </Window>

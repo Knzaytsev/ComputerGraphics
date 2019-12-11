@@ -394,5 +394,86 @@ namespace Drawing
 
             Compute3DOperation(transportMatrix, zc);
         }
+
+        private void ScaleButton_Click(object sender, RoutedEventArgs e)
+        {
+            var a = double.Parse(aScaleTextBox.Text);
+            var d = double.Parse(dScaleTextBox.Text);
+            var es = double.Parse(eScaleTextBox.Text);
+
+            var scaleMatrix = new double[,]
+            {
+                {a, 0, 0, 0 },
+                {0, d, 0, 0 },
+                {0, 0, es, 0 },
+                {0, 0, 0, 1 }
+            };
+
+            Compute3DOperation(scaleMatrix, zc);
+
+            aScaleTextBox.Text = "1";
+            dScaleTextBox.Text = "1";
+            eScaleTextBox.Text = "1";
+        }
+
+        private void TransportButton_Click(object sender, RoutedEventArgs e)
+        {
+            var x = double.Parse(xTransportTextBox.Text);
+            var y = double.Parse(yTransportTextBox.Text);
+            var z = double.Parse(zTransportTextBox.Text);
+
+            var scaleMatrix = new double[,]
+            {
+                {1, 0, 0, 0 },
+                {0, 1, 0, 0 },
+                {0, 0, 1, 0 },
+                {x, y, z, 1 }
+            };
+
+            Compute3DOperation(scaleMatrix, zc);
+
+            xTransportTextBox.Text = "0";
+            yTransportTextBox.Text = "0";
+            zTransportTextBox.Text = "0";
+        }
+
+        private void MirrorStartButton_Click(object sender, RoutedEventArgs e)
+        {
+            var mirrorMatrix = new double[,]
+            {
+                {-1, 0, 0, 0 },
+                {0, -1, 0, 0 },
+                {0, 0, -1, 0 },
+                {0, 0, 0, 1 }
+            };
+
+            Compute3DOperation(mirrorMatrix, zc);
+        }
+
+        private void MirrorZButton_Click(object sender, RoutedEventArgs e)
+        {
+            var mirrorMatrix = new double[,]
+            {
+                {-1, 0, 0, 0 },
+                {0, -1, 0, 0 },
+                {0, 0, 1, 0 },
+                {0, 0, 0, 1 }
+            };
+
+            Compute3DOperation(mirrorMatrix, zc);
+        }
+
+        private void MirrorX0Button_Click(object sender, RoutedEventArgs e)
+        {
+            var mirrorMatrix = new double[,]
+            {
+                {-1, 0, 0, 0 },
+                {0, 1, 0, 0 },
+                {0, 0, 1, 0 },
+                {0, 0, 0, 1 }
+            };
+
+            Compute3DOperation(mirrorMatrix, zc);
+        }
     }
 }
