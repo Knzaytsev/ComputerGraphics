@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Drawing"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280">
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="0*"/>
@@ -34,7 +34,7 @@
         <Label Content="Вращение по оси Z" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1038,152,0,0" Height="26" Width="116"/>
         <Label Content="Изменение точки схода" HorizontalAlignment="Left" Margin="1038,224,0,0" VerticalAlignment="Top" Height="26" Width="140"/>
         <Button x:Name="SaveButton" Content="Сохранить" HorizontalAlignment="Left" Margin="698,358,0,0" VerticalAlignment="Top" Width="74" Click="SaveButton_Click" Height="20"/>
-        <Button x:Name="LoadButton" Content="Загрузить" HorizontalAlignment="Left" Margin="698,383,0,0" VerticalAlignment="Top" Width="74" Height="20"/>
+        <Button x:Name="LoadButton" Content="Загрузить" HorizontalAlignment="Left" Margin="698,383,0,0" VerticalAlignment="Top" Width="74" Height="20" Click="LoadButton_Click"/>
         <TextBox x:Name="aScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="811,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"/>
         <Label Content="a" HorizontalAlignment="Left" Margin="811,15,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="dScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="871,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"/>

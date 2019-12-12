@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Drawing.Data
 {
-    class LineData
+    public class LineData
     {
         public int Id { get; set; }
         public double X1 { get; set; }

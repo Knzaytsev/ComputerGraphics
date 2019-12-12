@@ -15,6 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Drawing.Data;
+using Microsoft.Win32;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace Drawing
 {
@@ -355,7 +358,18 @@ namespace Drawing
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "xml files (*.xml)|*.xml";
 
+            if (sfd.ShowDialog() == true)
+            {
+                XmlSerializer formatter = new XmlSerializer(typeof(List<LineData>));
+
+                using (FileStream fs = new FileStream(sfd.FileName, FileMode.OpenOrCreate))
+                {
+                    formatter.Serialize(fs, dataLine);
+                }
+            }
         }
 
         private void xTransportSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -495,6 +509,45 @@ namespace Drawing
             };
 
             Compute3DOperation(mirrorMatrix, zc);
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "xml files (*.xml)|*.xml";
+
+            if (ofd.ShowDialog() == true)
+            {
+                id = 0;
+                canvas.Children.Clear();
+                dataLine.Clear();
+                currentLine = new Line();
+                canvas.Children.Add(currentLine);
+                shape = new MainShape(currentLine, new CoordinateSystem2DInteractor(canvas.Width, canvas.Height));
+
+                XmlSerializer formatter = new XmlSerializer(typeof(List<LineData>));
+
+                using(var fs = new FileStream(ofd.FileName, FileMode.Open))
+                {
+                    dataLine = formatter.Deserialize(fs) as List<LineData>;
+                }
+            }
+
+            foreach (var d in dataLine)
+            {
+                var line = new Line()
+                {
+                    X1 = d.X1,
+                    Y1 = d.Y1,
+                    X2 = d.X2,
+                    Y2 = d.Y2,
+                    StrokeThickness = d.StrokeThickness,
+                    Stroke = Brushes.Black,
+                    Tag = id
+                };
+                canvas.Children.Add(line);
+                id++;
+            }
         }
     }
 }
