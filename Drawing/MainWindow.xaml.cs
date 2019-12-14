@@ -56,7 +56,42 @@ namespace Drawing
             MouseUp += dropElement_MouseUp;
             KeyDown += pickFewElements_KeyDown;
             KeyUp += upKey_KeyUp;
+            PreviewMouseUp += upMouse;
+            ChangeEnabling(false);
+        }
 
+        private void upMouse(object sender, MouseButtonEventArgs e)
+        {
+            var cnt = shape.GetShapes().Count;
+            if (cnt < 1)
+            {
+                ChangeEnabling(false);
+            }
+            else
+            {
+                ChangeEnabling(true);
+                if(cnt < 2)
+                {
+                    CreateBiss.IsEnabled = false;
+                }
+            }
+        }
+
+        private void ChangeEnabling(bool enable)
+        {
+            phiSlider.IsEnabled = enable;
+            thetaSlider.IsEnabled = enable;
+            gammaSlider.IsEnabled = enable;
+            zcSlider.IsEnabled = enable;
+            doZ.IsEnabled = enable;
+            ScaleButton.IsEnabled = enable;
+            TransportButton.IsEnabled = enable;
+            MirrorZButton.IsEnabled = enable;
+            MirrorX0Button.IsEnabled = enable;
+            MirrorStartButton.IsEnabled = enable;
+            createMedian.IsEnabled = enable;
+            createHeight.IsEnabled = enable;
+            CreateBiss.IsEnabled = enable;
         }
 
         private void upKey_KeyUp(object sender, KeyEventArgs e)
@@ -548,6 +583,83 @@ namespace Drawing
                 canvas.Children.Add(line);
                 id++;
             }
+        }
+
+        private void sliderMorffing_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var morfs = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Morffing").ToArray();
+            if (morfs.Any())
+            {
+                for (var i = 0; i < morfs.Length; ++i)
+                {
+                    canvas.Children.Remove(morfs[i]);
+                }
+            }
+
+            var start = shape.GetShapes().Select(x => x as Line).ToList();
+            var end = canvas.Children.Cast<UIElement>()
+                .Where(x => x is Line).Select(x => x as Line)
+                .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(start).ToList();
+            Morffing morffing = new Morffing(Math.Round(e.NewValue), start, end);
+            var lines = morffing.MorffingLines();
+            foreach(var l in lines)
+            {
+                canvas.Children.Add(l);
+            }
+        }
+
+        private void MergeFigures_Click(object sender, RoutedEventArgs e)
+        {
+            var morfs = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Polyline").ToArray();
+            if (morfs.Any())
+            {
+                for (var i = 0; i < morfs.Length; ++i)
+                {
+                    canvas.Children.Remove(morfs[i]);
+                }
+            }
+
+            var figureA = shape.GetShapes().Select(x => x as Line).ToList();
+            var figureB = canvas.Children.Cast<UIElement>()
+                .Where(x => x is Line).Select(x => x as Line)
+                .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(figureA).ToList();
+            Morffing morffing = new Morffing();
+            var numberPoints = int.Parse(MakePoints.Text);
+            var A = int.Parse(ProportionA.Text);
+            var B = int.Parse(ProportionB.Text);
+            var points = BreakLines(figureA, numberPoints);
+            points.AddRange(BreakLines(figureB, numberPoints));
+            var polyLine = morffing.MorffingShapes(points, new double[] { A, B }, numberPoints);
+            canvas.Children.Add(polyLine);
+        }
+
+        private List<Point[]> BreakLines(List<Line> lines, int numberPoints)
+        {
+            var linePoints = new List<Point[]>();
+            var pointsPerLine = numberPoints / lines.Count;
+            var additionalPoints = numberPoints % lines.Count;
+
+            for(var i = 0; i < lines.Count; i += pointsPerLine)
+            {
+                var points = new Point[pointsPerLine + additionalPoints];
+                var deltaX = Math.Abs(lines[i].X1 - lines[i].X2) / (pointsPerLine + additionalPoints);
+                var deltaY = Math.Abs(lines[i].Y1 - lines[i].Y2) / (pointsPerLine + additionalPoints);
+                var x = Math.Min(lines[i].X1, lines[i].X2);
+                var y = Math.Min(lines[i].Y1, lines[i].Y2);
+
+                for(var j = 0; j < pointsPerLine + additionalPoints; ++j)
+                {
+                    x += deltaX;
+                    y += deltaY;
+
+                    points[j] = new Point(x, y);
+                }
+
+                linePoints.Add(points);
+                additionalPoints = 0;
+            }
+
+            return linePoints;
         }
     }
 }

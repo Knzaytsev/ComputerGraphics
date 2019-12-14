@@ -86,6 +86,7 @@
     <Compile Include="Interactors\CoordinateSystem2DInteractor.cs" />
     <Compile Include="Interactors\CoordinateSystemInteractor.cs" />
     <Compile Include="Interactors\LineInteractor.cs" />
+    <Compile Include="Interactors\Morffing.cs" />
     <Compile Include="Interactors\ShapeInteractor.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
