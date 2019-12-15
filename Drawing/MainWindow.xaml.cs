@@ -201,6 +201,23 @@ namespace Drawing
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
                     shape.MoveShape(oldPoint, e.GetPosition(canvas));
+                    var lines = shape.GetShapes().Select(x => x as Line);
+                    foreach(var line in lines)
+                    {
+                        var data = dataLine.Where(x => x.Id == (int)line.Tag).First();
+                        data.X1 = line.X1;
+                        data.Y1 = line.Y1;
+                        data.X2 = line.X2;
+                        data.Y2 = line.Y2;
+                    }
+                    /*foreach(var data in dataLine)
+                    {
+                        var line = lines.Where(x => (int)x.Tag == data.Id).First() as Line;
+                        data.X1 = line.X1;
+                        data.Y1 = line.Y1;
+                        data.X2 = line.X2;
+                        data.Y2 = line.Y2;
+                    }*/
                 }
                 var curPos = coordinateSystem.GetPoint(e.GetPosition(canvas));
                 mousePosition.Content = curPos[0] + "; " + curPos[1];
@@ -400,7 +417,7 @@ namespace Drawing
             {
                 XmlSerializer formatter = new XmlSerializer(typeof(List<LineData>));
 
-                using (FileStream fs = new FileStream(sfd.FileName, FileMode.OpenOrCreate))
+                using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create))
                 {
                     formatter.Serialize(fs, dataLine);
                 }
@@ -627,23 +644,26 @@ namespace Drawing
             var numberPoints = int.Parse(MakePoints.Text);
             var A = int.Parse(ProportionA.Text);
             var B = int.Parse(ProportionB.Text);
-            var points = BreakLines(figureA, numberPoints);
-            points.AddRange(BreakLines(figureB, numberPoints));
-            var polyLine = morffing.MorffingShapes(points, new double[] { A, B }, numberPoints);
+            var linePoints = new List<Point[]>();
+            var points = BreakLines(figureA, numberPoints).ToArray();
+            linePoints.Add(points);
+            points = BreakLines(figureB, numberPoints).ToArray();
+            linePoints.Add(points);
+            var polyLine = morffing.MorffingShapes(linePoints, new double[] { A, B }, numberPoints);
             canvas.Children.Add(polyLine);
         }
 
-        private List<Point[]> BreakLines(List<Line> lines, int numberPoints)
+        private List<Point> BreakLines(List<Line> lines, int numberPoints)
         {
-            var linePoints = new List<Point[]>();
+            var points = new List<Point>();
             var pointsPerLine = numberPoints / lines.Count;
             var additionalPoints = numberPoints % lines.Count;
 
-            for(var i = 0; i < lines.Count; i += pointsPerLine)
+            for(var i = 0; i < lines.Count; ++i)
             {
-                var points = new Point[pointsPerLine + additionalPoints];
-                var deltaX = Math.Abs(lines[i].X1 - lines[i].X2) / (pointsPerLine + additionalPoints);
-                var deltaY = Math.Abs(lines[i].Y1 - lines[i].Y2) / (pointsPerLine + additionalPoints);
+                //var points = new Point[pointsPerLine + additionalPoints];
+                var deltaX = Math.Abs(lines[i].X1 - lines[i].X2) / (pointsPerLine + additionalPoints + 1);
+                var deltaY = Math.Abs(lines[i].Y1 - lines[i].Y2) / (pointsPerLine + additionalPoints + 1);
                 var x = Math.Min(lines[i].X1, lines[i].X2);
                 var y = Math.Min(lines[i].Y1, lines[i].Y2);
 
@@ -652,14 +672,15 @@ namespace Drawing
                     x += deltaX;
                     y += deltaY;
 
-                    points[j] = new Point(x, y);
+                    //points[j] = new Point(x, y);
+                    points.Add(new Point(x, y));
                 }
 
-                linePoints.Add(points);
+                //linePoints.Add(points);
                 additionalPoints = 0;
             }
 
-            return linePoints;
+            return points;
         }
     }
 }

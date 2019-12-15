@@ -72,16 +72,19 @@ namespace Drawing.Interactors
 
             for(var i = 0; i < numberPoints; ++i)
             {
-                var x = points.Sum(p => p[i].X * proportions[points.IndexOf(p)]) / sumProportions;
-                var y = points.Sum(p => p[i].Y * proportions[points.IndexOf(p)]) / sumProportions;
-
-                segment.Points.Add(new Point(x, y));
-                /*for(var j = 0; j < points.Count; ++j)
+                var x = 0D;
+                var y = 0D;
+                for(var j = 0; j < points.Count; ++j)
                 {
                     x += points[j][i].X * proportions[j];
-                }*/
-            }
+                    y += points[j][i].Y * proportions[j];
+                }
 
+                x /= sumProportions;
+                y /= sumProportions;
+                segment.Points.Add(new Point(x, y));
+            }
+            segment.Points.Add(segment.Points[0]);
             return segment;
         }
     }
