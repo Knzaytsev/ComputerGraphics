@@ -34,18 +34,18 @@
         <Label Content="Изменение точки схода" HorizontalAlignment="Left" Margin="1038,224,0,0" VerticalAlignment="Top" Height="26" Width="140"/>
         <Button x:Name="SaveButton" Content="Сохранить" HorizontalAlignment="Left" Margin="698,358,0,0" VerticalAlignment="Top" Width="74" Click="SaveButton_Click" Height="20"/>
         <Button x:Name="LoadButton" Content="Загрузить" HorizontalAlignment="Left" Margin="698,383,0,0" VerticalAlignment="Top" Width="74" Height="20" Click="LoadButton_Click"/>
-        <TextBox x:Name="aScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="811,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"/>
+        <TextBox x:Name="aScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="811,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50" KeyUp="aScaleKeyUp"/>
         <Label Content="a" HorizontalAlignment="Left" Margin="811,15,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="dScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="871,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"/>
+        <TextBox x:Name="dScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="871,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50" KeyUp="dScaleKeyUp"/>
         <Label Content="d" HorizontalAlignment="Left" Margin="871,15,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="eScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="928,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"/>
+        <TextBox x:Name="eScaleTextBox" HorizontalAlignment="Left" Height="23" Margin="928,46,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50" KeyUp="eScaleKeyUp"/>
         <Label Content="e" HorizontalAlignment="Left" Margin="928,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="4.235,0.5"/>
         <Button x:Name="ScaleButton" Content="Масштабировать" HorizontalAlignment="Left" Margin="839,74,0,0" VerticalAlignment="Top" Width="114" Click="ScaleButton_Click"/>
-        <TextBox x:Name="xTransportTextBox" HorizontalAlignment="Left" Height="23" Margin="811,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"/>
+        <TextBox x:Name="xTransportTextBox" HorizontalAlignment="Left" Height="23" Margin="811,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50" KeyUp="xTransportKeyUp"/>
         <Label Content="x" HorizontalAlignment="Left" Margin="811,99,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="yTransportTextBox" HorizontalAlignment="Left" Height="23" Margin="871,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"/>
+        <TextBox x:Name="yTransportTextBox" HorizontalAlignment="Left" Height="23" Margin="871,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50" KeyUp="yTransportKeyUp"/>
         <Label Content="y" HorizontalAlignment="Left" Margin="871,99,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="zTransportTextBox" HorizontalAlignment="Left" Height="23" Margin="928,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"/>
+        <TextBox x:Name="zTransportTextBox" HorizontalAlignment="Left" Height="23" Margin="928,130,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50" KeyUp="zTransportKeyUp"/>
         <Label Content="z" HorizontalAlignment="Left" Margin="928,99,0,0" VerticalAlignment="Top" RenderTransformOrigin="4.235,0.5"/>
         <Button x:Name="TransportButton" Content="Переместить" HorizontalAlignment="Left" Margin="839,158,0,0" VerticalAlignment="Top" Width="114" Click="TransportButton_Click"/>
         <Label Content="Зеркалирование относительно" HorizontalAlignment="Left" Margin="811,198,0,0" VerticalAlignment="Top"/>
@@ -55,11 +55,11 @@
         <Button x:Name="CreateBiss" Content="Создать&#xD;&#xA;биссектрису" HorizontalAlignment="Left" Margin="968,306,0,0" VerticalAlignment="Top" Width="75" Click="CreateBiss_Click"/>
         <Slider x:Name="sliderMorffing" HorizontalAlignment="Left" Margin="785,383,0,0" VerticalAlignment="Top" Width="258" ValueChanged="sliderMorffing_ValueChanged"/>
         <Label Content="Морфинг" HorizontalAlignment="Left" Margin="785,352,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="MakePoints" HorizontalAlignment="Left" Height="23" Margin="785,467,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="108"/>
+        <TextBox x:Name="MakePoints" HorizontalAlignment="Left" Height="23" Margin="785,467,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="108" KeyUp="KeyUpMakePoints"/>
         <Label Content="Количество точек" HorizontalAlignment="Left" Margin="785,436,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="ProportionA" HorizontalAlignment="Left" Height="23" Margin="918,467,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="108"/>
+        <TextBox x:Name="ProportionA" HorizontalAlignment="Left" Height="23" Margin="918,467,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="108" KeyUp="ProportionAKeyUp"/>
         <Label Content="Пропорции для A" HorizontalAlignment="Left" Margin="918,436,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="ProportionB" HorizontalAlignment="Left" Height="23" Margin="1047,465,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="ProportionB" HorizontalAlignment="Left" Height="23" Margin="1047,465,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120" KeyUp="ProportionBKeyUp"/>
         <Label Content="Пропорции для B" HorizontalAlignment="Left" Margin="1047,436,0,0" VerticalAlignment="Top"/>
         <Button x:Name="MergeFigures" Content="Соединить" HorizontalAlignment="Left" Margin="918,506,0,0" VerticalAlignment="Top" Width="108" Click="MergeFigures_Click"/>
         <Button x:Name="SetLocalCoordinate"  Content="Установить&#xD;&#xA;локальную СК" HorizontalAlignment="Left" Margin="1111,306,0,0" VerticalAlignment="Top" Width="95" Height="37" Click="SetLocalCoordinate_Click"/>

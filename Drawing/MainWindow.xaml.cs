@@ -18,6 +18,7 @@ using Drawing.Data;
 using Microsoft.Win32;
 using System.Xml.Serialization;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Drawing
 {
@@ -661,29 +662,36 @@ namespace Drawing
         }
         #endregion
 
-        #region Checking
-        private void ChangeEnabling(bool enable)
+        #region Checking MergeFigures
+        private void KeyUpMakePoints(object sender, KeyEventArgs e)
         {
-            phiSlider.IsEnabled = enable;
-            thetaSlider.IsEnabled = enable;
-            gammaSlider.IsEnabled = enable;
-            zcSlider.IsEnabled = enable;
-            doZ.IsEnabled = enable;
-            ScaleButton.IsEnabled = enable;
-            TransportButton.IsEnabled = enable;
-            MirrorZButton.IsEnabled = enable;
-            MirrorX0Button.IsEnabled = enable;
-            MirrorStartButton.IsEnabled = enable;
-            createMedian.IsEnabled = enable;
-            createHeight.IsEnabled = enable;
-            CreateBiss.IsEnabled = enable;
+            ActivateMerge();
         }
 
-        private void upKey_KeyUp(object sender, KeyEventArgs e)
+        private void ProportionAKeyUp(object sender, KeyEventArgs e)
         {
-            downed = false;
+            ActivateMerge();
         }
 
+        private void ProportionBKeyUp(object sender, KeyEventArgs e)
+        {
+            ActivateMerge();
+        }
+
+        private void ActivateMerge()
+        {
+            var regex = @"(^0+|\D)";
+            var makePointsMatch = Regex.IsMatch(MakePoints.Text, regex);
+            var proportionAMatch = Regex.IsMatch(ProportionA.Text, regex);
+            var proportionBMatch = Regex.IsMatch(ProportionB.Text, regex);
+            if (makePointsMatch || proportionAMatch || proportionBMatch/* || textBox.Text == ""*/)
+                MergeFigures.IsEnabled = false;
+            else
+                MergeFigures.IsEnabled = true;
+        }
+        #endregion
+
+        #region Checking 3D Figures
         private void KeyUpZ1(object sender, KeyEventArgs e)
         {
             ActivateDoZ();
@@ -707,6 +715,77 @@ namespace Drawing
         {
             ActivateDoZ();
         }
+
+        private void Activate3DButtons(TextBox tbA, TextBox tbB, TextBox tbC, Button button)
+        {
+            try
+            {
+                double.Parse(tbA.Text);
+                double.Parse(tbB.Text);
+                double.Parse(tbC.Text);
+                button.IsEnabled = true;
+            }
+            catch
+            {
+                button.IsEnabled = false;
+            }
+        }
+
+        private void aScaleKeyUp(object sender, KeyEventArgs e)
+        {
+            Activate3DButtons((TextBox)sender, dScaleTextBox, eScaleTextBox, ScaleButton);
+        }
+
+        private void dScaleKeyUp(object sender, KeyEventArgs e)
+        {
+            Activate3DButtons((TextBox)sender, aScaleTextBox, eScaleTextBox, ScaleButton);
+        }
+
+        private void eScaleKeyUp(object sender, KeyEventArgs e)
+        {
+            Activate3DButtons((TextBox)sender, aScaleTextBox, dScaleTextBox, ScaleButton);
+        }
+
+        private void xTransportKeyUp(object sender, KeyEventArgs e)
+        {
+            Activate3DButtons((TextBox)sender, yTransportTextBox, zTransportTextBox, TransportButton);
+        }
+
+        private void yTransportKeyUp(object sender, KeyEventArgs e)
+        {
+            Activate3DButtons((TextBox)sender, xTransportTextBox, zTransportTextBox, TransportButton);
+        }
+
+        private void zTransportKeyUp(object sender, KeyEventArgs e)
+        {
+            Activate3DButtons((TextBox)sender, xTransportTextBox, yTransportTextBox, TransportButton);
+        }
         #endregion
+
+        #region Checking
+        private void ChangeEnabling(bool enable)
+        {
+            phiSlider.IsEnabled = enable;
+            thetaSlider.IsEnabled = enable;
+            gammaSlider.IsEnabled = enable;
+            zcSlider.IsEnabled = enable;
+            doZ.IsEnabled = enable;
+            ScaleButton.IsEnabled = enable;
+            TransportButton.IsEnabled = enable;
+            MirrorZButton.IsEnabled = enable;
+            MirrorX0Button.IsEnabled = enable;
+            MirrorStartButton.IsEnabled = enable;
+            createMedian.IsEnabled = enable;
+            createHeight.IsEnabled = enable;
+            CreateBiss.IsEnabled = enable;
+        }
+
+        private void upKey_KeyUp(object sender, KeyEventArgs e)
+        {
+            downed = false;
+        }
+
+        #endregion
+
     }
 }
