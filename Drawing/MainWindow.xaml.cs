@@ -32,15 +32,13 @@ namespace Drawing
         private Composite.MainShape shape;
         private bool downed = false;
         private Point oldPoint;
-        private double phi = 0;
-        private double theta = 0;
-        private double gamma = 0;
         private double zc = 10;
         private int id = 0;
         private List<LineData> dataLine = new List<LineData>();
         private bool median = false;
         private bool height = false;
         private bool localCS = false;
+        private bool enabledCS = false;
 
         public MainWindow()
         {
@@ -180,6 +178,10 @@ namespace Drawing
                 var point = e.GetPosition(canvas);
                 coordinateSystem.SetOffsetVector(new double[] { point.X, point.Y });
                 localCS = false;
+                if(enabledCS == true)
+                {
+                    AddCoordinateSystem();
+                }
             }
 
             if (e.Source is Shape)
@@ -208,6 +210,14 @@ namespace Drawing
         {
             if (e.GetPosition(canvas).X < canvas.Width)
             {
+                if (enabledCS && localCS)
+                {
+                    var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
+                    ClearCoordinateSystem(lines);
+                    var point = e.GetPosition(canvas);
+                    coordinateSystem.SetOffsetVector(new double[] { point.X, point.Y });
+                    AddCoordinateSystem();
+                }
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
                     shape.MoveShape(oldPoint, e.GetPosition(canvas));
@@ -237,18 +247,24 @@ namespace Drawing
 
         private void coordinateSystem_Button_Click(object sender, RoutedEventArgs e)
         {
+            enabledCS = true ? enabledCS == false : false;
             var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
             if (!lines.Any())
             {
-                var createdLines = coordinateSystem.CreateAxes(canvas.Width, canvas.Height, 50);
-                foreach (var l in createdLines)
-                {
-                    canvas.Children.Add(l);
-                }
+                AddCoordinateSystem();
             }
             else
             {
                 ClearCoordinateSystem(lines);
+            }
+        }
+
+        private void AddCoordinateSystem()
+        {
+            var createdLines = coordinateSystem.CreateAxes(canvas.Width, canvas.Height, 50);
+            foreach (var l in createdLines)
+            {
+                canvas.Children.Add(l);
             }
         }
 
@@ -708,6 +724,10 @@ namespace Drawing
             var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
             ClearCoordinateSystem(lines);
             coordinateSystem.SetOffsetVector(new double[] { canvas.Width / 2, canvas.Height / 2 });
+            if (enabledCS)
+            {
+                AddCoordinateSystem();
+            }
         }
     }
 }
