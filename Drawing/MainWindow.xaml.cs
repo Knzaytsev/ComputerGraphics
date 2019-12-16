@@ -55,6 +55,7 @@ namespace Drawing
             KeyUp += upKey_KeyUp;
             PreviewMouseUp += upMouse;
             ChangeEnabling(false);
+            ActivateMergeBecauseOfLines();
         }
 
         #region Create and Delete line Methods
@@ -74,6 +75,8 @@ namespace Drawing
                 StrokeThickness = line.StrokeThickness
             });
             ++id;
+
+            ActivateMergeBecauseOfLines();
         }
 
         private void deleteLine_Click(object sender, RoutedEventArgs e)
@@ -82,6 +85,9 @@ namespace Drawing
             currentLine = new Line();
             canvas.Children.Add(currentLine);
             shape = new Composite.MainShape(currentLine, coordinateSystem);
+
+            ActivateMergeBecauseOfLines();
+            ActivateMorffingButton();
         }
         #endregion
 
@@ -177,6 +183,9 @@ namespace Drawing
 
                 ShowCoordinates();
             }
+
+            ActivateMergeBecauseOfLines();
+            ActivateMorffingButton();
         }
 
         private void dragElement_MouseMove(object sender, MouseEventArgs e)
@@ -662,6 +671,25 @@ namespace Drawing
         }
         #endregion
 
+        #region Checking Morffing
+        private void ActivateMorffingButton()
+        {
+            var lines = shape.GetShapes();
+            var freeLines = canvas.Children.Cast<UIElement>()
+                        .Where(x => x is Line).Select(x => x as Line)
+                        .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(lines).ToList();
+
+            if(lines.Count == freeLines.Count && lines.Count > 0)
+            {
+                sliderMorffing.IsEnabled = true;
+            }
+            else
+            {
+                sliderMorffing.IsEnabled = false;
+            }
+        }
+        #endregion
+
         #region Checking MergeFigures
         private void KeyUpMakePoints(object sender, KeyEventArgs e)
         {
@@ -688,6 +716,23 @@ namespace Drawing
                 MergeFigures.IsEnabled = false;
             else
                 MergeFigures.IsEnabled = true;
+        }
+
+        private void ActivateMergeBecauseOfLines()
+        {
+            var lines = shape.GetShapes();
+            var freeLines = canvas.Children.Cast<UIElement>()
+                        .Where(x => x is Line).Select(x => x as Line)
+                        .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(lines).ToList();
+
+            if (lines.Count > 0 && freeLines.Count > 0)
+            {
+                MergeFigures.IsEnabled = true;
+            }
+            else
+            {
+                MergeFigures.IsEnabled = false;
+            }
         }
         #endregion
 
