@@ -21,7 +21,6 @@
         <Button x:Name="coordinateSystem_Button" Content="СК" HorizontalAlignment="Left" Margin="697,104,0,0" VerticalAlignment="Top" Width="62" Height="40" Click="coordinateSystem_Button_Click"/>
         <Label x:Name="lineEquation" Content="Ур-е" HorizontalAlignment="Left" Margin="697,250,0,0" VerticalAlignment="Top" Height="27" Width="103"/>
         <Label x:Name="endsCoord" Content="Концы линии" HorizontalAlignment="Left" Margin="697,185,0,0" VerticalAlignment="Top" Height="65" Width="101"/>
-        <Button x:Name="doZ" Content="Добавить Z" Margin="698,321,500,0" VerticalAlignment="Top" Click="doZ_Click" Height="20"/>
         <Slider x:Name="phiSlider" HorizontalAlignment="Left" Margin="1038,38,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="phiSlider_ValueChanged" Height="18"/>
         <Slider x:Name="thetaSlider" HorizontalAlignment="Left" Margin="1038,107,0,0" SmallChange="1" VerticalAlignment="Top" Width="200" Maximum="360" Minimum="0" ValueChanged="thetaSlider_ValueChanged" Height="18"/>
         <TextBox x:Name="addZ2TextBlock" HorizontalAlignment="Left" Height="20" Margin="698,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="74" KeyUp="KeyUpZ2"/>
@@ -65,5 +64,6 @@
         <Button x:Name="MergeFigures" Content="Соединить" HorizontalAlignment="Left" Margin="918,506,0,0" VerticalAlignment="Top" Width="108" Click="MergeFigures_Click"/>
         <Button x:Name="SetLocalCoordinate"  Content="Установить&#xD;&#xA;локальную СК" HorizontalAlignment="Left" Margin="1111,306,0,0" VerticalAlignment="Top" Width="95" Height="37" Click="SetLocalCoordinate_Click"/>
         <Button x:Name="BackOriginCS" Content="Вернуть&#xD;&#xA;начальную СК" HorizontalAlignment="Left" Margin="1111,378,0,0" VerticalAlignment="Top" Width="95" Click="BackOriginCS_Click"/>
+        <Button x:Name="doZ" Content="Добавить Z" HorizontalAlignment="Left" Margin="698,328,0,0" VerticalAlignment="Top" Width="74" Click="doZ_Click"/>
     </Grid>
 </Window>

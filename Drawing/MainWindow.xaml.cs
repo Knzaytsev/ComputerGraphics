@@ -46,10 +46,7 @@ namespace Drawing
             coordinateSystem = new CoordinateSystem2DInteractor(canvas.Width, canvas.Height);
             canvas.Children.Add(currentLine);
             shape = new Composite.MainShape(currentLine, coordinateSystem);
-            //var matrix = MakeOperationMatrix(phi, theta, zc);
-            //SetValuesDataGrid(matrix);
             ActivateDoZ();
-            //canvas.MouseMove += dragElement_MouseMove;
             MouseMove += dragElement_MouseMove;
             MouseDown += pickElement_MouseDown;
             MouseUp += dropElement_MouseUp;
@@ -59,51 +56,7 @@ namespace Drawing
             ChangeEnabling(false);
         }
 
-        private void upMouse(object sender, MouseButtonEventArgs e)
-        {
-            var cnt = shape.GetShapes().Count;
-            if (cnt < 1)
-            {
-                ChangeEnabling(false);
-            }
-            else
-            {
-                ChangeEnabling(true);
-                if(cnt < 2)
-                {
-                    CreateBiss.IsEnabled = false;
-                }
-            }
-        }
-
-        private void ChangeEnabling(bool enable)
-        {
-            phiSlider.IsEnabled = enable;
-            thetaSlider.IsEnabled = enable;
-            gammaSlider.IsEnabled = enable;
-            zcSlider.IsEnabled = enable;
-            doZ.IsEnabled = enable;
-            ScaleButton.IsEnabled = enable;
-            TransportButton.IsEnabled = enable;
-            MirrorZButton.IsEnabled = enable;
-            MirrorX0Button.IsEnabled = enable;
-            MirrorStartButton.IsEnabled = enable;
-            createMedian.IsEnabled = enable;
-            createHeight.IsEnabled = enable;
-            CreateBiss.IsEnabled = enable;
-        }
-
-        private void upKey_KeyUp(object sender, KeyEventArgs e)
-        {
-            downed = false;
-        }
-
-        private void pickFewElements_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.LeftCtrl)
-                downed = true;
-        }
-
+        #region Create and Delete line Methods
         private void createLine_Click(object sender, RoutedEventArgs e)
         {
             var line = interactor.CreateRandomLine(canvas.Width, canvas.Height, Brushes.Black, 5, id);
@@ -128,6 +81,31 @@ namespace Drawing
             currentLine = new Line();
             canvas.Children.Add(currentLine);
             shape = new Composite.MainShape(currentLine, coordinateSystem);
+        }
+        #endregion
+
+        #region Pick, Up and Move
+        private void upMouse(object sender, MouseButtonEventArgs e)
+        {
+            var cnt = shape.GetShapes().Count;
+            if (cnt < 1)
+            {
+                ChangeEnabling(false);
+            }
+            else
+            {
+                ChangeEnabling(true);
+                if (cnt < 2)
+                {
+                    CreateBiss.IsEnabled = false;
+                }
+            }
+        }
+
+        private void pickFewElements_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl)
+                downed = true;
         }
 
         private void pickElement_MouseDown(object sender, MouseButtonEventArgs e)
@@ -178,7 +156,7 @@ namespace Drawing
                 var point = e.GetPosition(canvas);
                 coordinateSystem.SetOffsetVector(new double[] { point.X, point.Y });
                 localCS = false;
-                if(enabledCS == true)
+                if (enabledCS == true)
                 {
                     AddCoordinateSystem();
                 }
@@ -200,12 +178,6 @@ namespace Drawing
             }
         }
 
-        private void ShowEquation()
-        {
-            var equation = shape.GetEquation().Select(x => Math.Round(x)).ToArray();
-            lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
-        }
-
         private void dragElement_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.GetPosition(canvas).X < canvas.Width)
@@ -222,7 +194,7 @@ namespace Drawing
                 {
                     shape.MoveShape(oldPoint, e.GetPosition(canvas));
                     var lines = shape.GetShapes().Select(x => x as Line);
-                    foreach(var line in lines)
+                    foreach (var line in lines)
                     {
                         var data = dataLine.Where(x => x.Id == (int)line.Tag).First();
                         data.X1 = line.X1;
@@ -230,14 +202,6 @@ namespace Drawing
                         data.X2 = line.X2;
                         data.Y2 = line.Y2;
                     }
-                    /*foreach(var data in dataLine)
-                    {
-                        var line = lines.Where(x => (int)x.Tag == data.Id).First() as Line;
-                        data.X1 = line.X1;
-                        data.Y1 = line.Y1;
-                        data.X2 = line.X2;
-                        data.Y2 = line.Y2;
-                    }*/
                 }
                 var curPos = coordinateSystem.GetPoint(e.GetPosition(canvas));
                 mousePosition.Content = curPos[0] + "; " + curPos[1];
@@ -245,6 +209,18 @@ namespace Drawing
             oldPoint = e.GetPosition(canvas);
         }
 
+        private void dropElement_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.Source is Shape)
+            {
+                ShowEquation();
+
+                ShowCoordinates();
+            }
+        }
+        #endregion
+
+        #region Coordinate System
         private void coordinateSystem_Button_Click(object sender, RoutedEventArgs e)
         {
             enabledCS = true ? enabledCS == false : false;
@@ -276,16 +252,104 @@ namespace Drawing
             }
         }
 
-        private void dropElement_MouseUp(object sender, MouseButtonEventArgs e)
+        private void SetLocalCoordinate_Click(object sender, RoutedEventArgs e)
         {
-            if (e.Source is Shape)
-            {
-                ShowEquation();
+            localCS = true;
+        }
 
-                ShowCoordinates();
+        private void BackOriginCS_Click(object sender, RoutedEventArgs e)
+        {
+            var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
+            ClearCoordinateSystem(lines);
+            coordinateSystem.SetOffsetVector(new double[] { canvas.Width / 2, canvas.Height / 2 });
+            if (enabledCS)
+            {
+                AddCoordinateSystem();
+            }
+        }
+        #endregion
+
+        #region Morffing
+        private void sliderMorffing_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var morfs = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Morffing").ToArray();
+            if (morfs.Any())
+            {
+                for (var i = 0; i < morfs.Length; ++i)
+                {
+                    canvas.Children.Remove(morfs[i]);
+                }
+            }
+
+            var start = shape.GetShapes().Select(x => x as Line).ToList();
+            var end = canvas.Children.Cast<UIElement>()
+                .Where(x => x is Line).Select(x => x as Line)
+                .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(start).ToList();
+            Morffing morffing = new Morffing(Math.Round(e.NewValue), start, end);
+            var lines = morffing.MorffingLines();
+            foreach (var l in lines)
+            {
+                canvas.Children.Add(l);
             }
         }
 
+        private void MergeFigures_Click(object sender, RoutedEventArgs e)
+        {
+            var morfs = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Polyline").ToArray();
+            if (morfs.Any())
+            {
+                for (var i = 0; i < morfs.Length; ++i)
+                {
+                    canvas.Children.Remove(morfs[i]);
+                }
+            }
+
+            var figureA = shape.GetShapes().Select(x => x as Line).ToList();
+            var figureB = canvas.Children.Cast<UIElement>()
+                .Where(x => x is Line).Select(x => x as Line)
+                .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(figureA).ToList();
+            Morffing morffing = new Morffing();
+            var numberPoints = int.Parse(MakePoints.Text);
+            var A = int.Parse(ProportionA.Text);
+            var B = int.Parse(ProportionB.Text);
+            var linePoints = new List<Point[]>();
+            var points = BreakLines(figureA, numberPoints).ToArray();
+            linePoints.Add(points);
+            points = BreakLines(figureB, numberPoints).ToArray();
+            linePoints.Add(points);
+            var polyLine = morffing.MorffingShapes(linePoints, new double[] { A, B }, numberPoints);
+            canvas.Children.Add(polyLine);
+        }
+
+        private List<Point> BreakLines(List<Line> lines, int numberPoints)
+        {
+            var points = new List<Point>();
+            var pointsPerLine = numberPoints / lines.Count;
+            var additionalPoints = numberPoints % lines.Count;
+
+            for (var i = 0; i < lines.Count; ++i)
+            {
+                var deltaX = Math.Abs(lines[i].X1 - lines[i].X2) / (pointsPerLine + additionalPoints + 1);
+                var deltaY = Math.Abs(lines[i].Y1 - lines[i].Y2) / (pointsPerLine + additionalPoints + 1);
+                var x = Math.Min(lines[i].X1, lines[i].X2);
+                var y = Math.Min(lines[i].Y1, lines[i].Y2);
+
+                for (var j = 0; j < pointsPerLine + additionalPoints; ++j)
+                {
+                    x += deltaX;
+                    y += deltaY;
+
+                    points.Add(new Point(x, y));
+                }
+
+                additionalPoints = 0;
+            }
+
+            return points;
+        }
+        #endregion
+
+        #region 3D Operations
         private void doZ_Click(object sender, RoutedEventArgs e)
         {
             var z1 = double.Parse(addZ1TextBlock.Text);
@@ -293,14 +357,6 @@ namespace Drawing
             shape.AddZ(new double[] { z1, z2 }, dataLine);
 
             ShowCoordinates();
-        }
-
-        private void ShowCoordinates()
-        {
-            var endCoordinates = shape.GetCoordinates().Select(x => Math.Round(x)).ToArray();
-            endsCoord.Content = 
-                "(" + endCoordinates[0] + "; " + endCoordinates[1] + "; " + endCoordinates[4] + ")\n" +
-                "(" + endCoordinates[2] + "; " + endCoordinates[3] + "; " + endCoordinates[5] + ")";
         }
 
         private void phiSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -335,94 +391,6 @@ namespace Drawing
             Compute3DOperation(rotateMatrix, md.Zc);
         }
 
-        private void zcSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            zc = Math.Round(e.NewValue) * 10;
-            MatrixData md = new MatrixData(0, zc);
-
-            shape.ProjectReal3D(md.Zc);
-        }
-
-        private GridData GetRow(int index, double[,] matrix)
-        {
-            var row = new GridData()
-            {
-                X = matrix[index, 0],
-                Y = matrix[index, 1],
-                Z = matrix[index, 3],
-                OK = 1
-            };
-            return row;
-        }
-
-        private void SetValuesDataGrid(double[,] matrix)
-        {
-            var rows = new List<GridData>();
-            for (var i = 0; i < 4; ++i)
-            {
-                var row = GetRow(i, matrix);
-                rows.Add(row);
-            }
-            //dgOperationMatrix.ItemsSource = rows;
-        }
-
-        private void KeyUpZ1(object sender, KeyEventArgs e)
-        {
-            ActivateDoZ();
-        }
-
-        private void ActivateDoZ()
-        {
-            try
-            {
-                var z1 = double.Parse(addZ1TextBlock.Text);
-                var z2 = double.Parse(addZ2TextBlock.Text);
-                doZ.IsEnabled = true;
-            }
-            catch
-            {
-                doZ.IsEnabled = false;
-            }
-        }
-
-        private void KeyUpZ2(object sender, KeyEventArgs e)
-        {
-            ActivateDoZ();
-        }
-
-        private void createMedian_Click(object sender, RoutedEventArgs e)
-        {
-            median = true;
-            height = false;
-        }
-
-        private void CreateHeight_Click(object sender, RoutedEventArgs e)
-        {
-            height = true;
-            median = false;
-        }
-
-        private void CreateBiss_Click(object sender, RoutedEventArgs e)
-        {
-            var lines = shape.GetShapes();
-            if (lines.Count != 2)
-                return;
-            var biss = interactor.CreateBiss(lines[0] as Line, lines[1] as Line, id);
-            canvas.Children.Add(biss);
-            dataLine.Add(new LineData()
-            {
-                Id = id,
-                X1 = biss.X1,
-                Y1 = biss.Y1,
-                X2 = biss.X2,
-                Y2 = biss.Y2,
-                Z1 = 0,
-                Z2 = 0,
-                StrokeThickness = biss.StrokeThickness
-            });
-            ++id;
-        }
-
         private void gammaSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var gamma = Math.Round(e.NewValue - e.OldValue);
@@ -439,20 +407,12 @@ namespace Drawing
             Compute3DOperation(rotateMatrix, md.Zc);
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private void zcSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "xml files (*.xml)|*.xml";
+            zc = Math.Round(e.NewValue) * 10;
+            MatrixData md = new MatrixData(0, zc);
 
-            if (sfd.ShowDialog() == true)
-            {
-                XmlSerializer formatter = new XmlSerializer(typeof(List<LineData>));
-
-                using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create))
-                {
-                    formatter.Serialize(fs, dataLine);
-                }
-            }
+            shape.ProjectReal3D(md.Zc);
         }
 
         private void xTransportSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -485,19 +445,6 @@ namespace Drawing
             Compute3DOperation(transportMatrix, zc);
         }
 
-        private void Compute3DOperation(double[,] operation, double zc)
-        {
-            shape.ComputeReal3D(operation);
-
-            shape.ProjectReal3D(zc);
-
-            SetValuesDataGrid(operation);
-
-            ShowCoordinates();
-
-            shape.SetDataLineCoordinates(dataLine);
-        }
-
         private void zTransportSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var k = Math.Round(e.NewValue * 10 - e.OldValue * 10);
@@ -511,6 +458,17 @@ namespace Drawing
             };
 
             Compute3DOperation(transportMatrix, zc);
+        }
+
+        private void Compute3DOperation(double[,] operation, double zc)
+        {
+            shape.ComputeReal3D(operation);
+
+            shape.ProjectReal3D(zc);
+
+            ShowCoordinates();
+
+            shape.SetDataLineCoordinates(dataLine);
         }
 
         private void ScaleButton_Click(object sender, RoutedEventArgs e)
@@ -593,6 +551,59 @@ namespace Drawing
 
             Compute3DOperation(mirrorMatrix, zc);
         }
+        #endregion
+
+        #region Median, Height, Biss
+        private void createMedian_Click(object sender, RoutedEventArgs e)
+        {
+            median = true;
+            height = false;
+        }
+
+        private void CreateHeight_Click(object sender, RoutedEventArgs e)
+        {
+            height = true;
+            median = false;
+        }
+
+        private void CreateBiss_Click(object sender, RoutedEventArgs e)
+        {
+            var lines = shape.GetShapes();
+            if (lines.Count != 2)
+                return;
+            var biss = interactor.CreateBiss(lines[0] as Line, lines[1] as Line, id);
+            canvas.Children.Add(biss);
+            dataLine.Add(new LineData()
+            {
+                Id = id,
+                X1 = biss.X1,
+                Y1 = biss.Y1,
+                X2 = biss.X2,
+                Y2 = biss.Y2,
+                Z1 = 0,
+                Z2 = 0,
+                StrokeThickness = biss.StrokeThickness
+            });
+            ++id;
+        }
+        #endregion
+
+        #region Save and Load
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "xml files (*.xml)|*.xml";
+
+            if (sfd.ShowDialog() == true)
+            {
+                XmlSerializer formatter = new XmlSerializer(typeof(List<LineData>));
+
+                using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create))
+                {
+                    formatter.Serialize(fs, dataLine);
+                }
+            }
+        }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
@@ -610,7 +621,7 @@ namespace Drawing
 
                 XmlSerializer formatter = new XmlSerializer(typeof(List<LineData>));
 
-                using(var fs = new FileStream(ofd.FileName, FileMode.Open))
+                using (var fs = new FileStream(ofd.FileName, FileMode.Open))
                 {
                     dataLine = formatter.Deserialize(fs) as List<LineData>;
                 }
@@ -632,102 +643,70 @@ namespace Drawing
                 id++;
             }
         }
+        #endregion
 
-        private void sliderMorffing_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        #region Show Info
+        private void ShowEquation()
         {
-            var morfs = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Morffing").ToArray();
-            if (morfs.Any())
-            {
-                for (var i = 0; i < morfs.Length; ++i)
-                {
-                    canvas.Children.Remove(morfs[i]);
-                }
-            }
-
-            var start = shape.GetShapes().Select(x => x as Line).ToList();
-            var end = canvas.Children.Cast<UIElement>()
-                .Where(x => x is Line).Select(x => x as Line)
-                .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(start).ToList();
-            Morffing morffing = new Morffing(Math.Round(e.NewValue), start, end);
-            var lines = morffing.MorffingLines();
-            foreach(var l in lines)
-            {
-                canvas.Children.Add(l);
-            }
+            var equation = shape.GetEquation().Select(x => Math.Round(x)).ToArray();
+            lineEquation.Content = "(" + equation[0] + "; " + equation[1] + "; " + equation[2] + ")";
         }
 
-        private void MergeFigures_Click(object sender, RoutedEventArgs e)
+        private void ShowCoordinates()
         {
-            var morfs = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Polyline").ToArray();
-            if (morfs.Any())
+            var endCoordinates = shape.GetCoordinates().Select(x => Math.Round(x)).ToArray();
+            endsCoord.Content =
+                "(" + endCoordinates[0] + "; " + endCoordinates[1] + "; " + endCoordinates[4] + ")\n" +
+                "(" + endCoordinates[2] + "; " + endCoordinates[3] + "; " + endCoordinates[5] + ")";
+        }
+        #endregion
+
+        #region Checking
+        private void ChangeEnabling(bool enable)
+        {
+            phiSlider.IsEnabled = enable;
+            thetaSlider.IsEnabled = enable;
+            gammaSlider.IsEnabled = enable;
+            zcSlider.IsEnabled = enable;
+            doZ.IsEnabled = enable;
+            ScaleButton.IsEnabled = enable;
+            TransportButton.IsEnabled = enable;
+            MirrorZButton.IsEnabled = enable;
+            MirrorX0Button.IsEnabled = enable;
+            MirrorStartButton.IsEnabled = enable;
+            createMedian.IsEnabled = enable;
+            createHeight.IsEnabled = enable;
+            CreateBiss.IsEnabled = enable;
+        }
+
+        private void upKey_KeyUp(object sender, KeyEventArgs e)
+        {
+            downed = false;
+        }
+
+        private void KeyUpZ1(object sender, KeyEventArgs e)
+        {
+            ActivateDoZ();
+        }
+
+        private void ActivateDoZ()
+        {
+            try
             {
-                for (var i = 0; i < morfs.Length; ++i)
-                {
-                    canvas.Children.Remove(morfs[i]);
-                }
+                var z1 = double.Parse(addZ1TextBlock.Text);
+                var z2 = double.Parse(addZ2TextBlock.Text);
+                doZ.IsEnabled = true;
             }
-
-            var figureA = shape.GetShapes().Select(x => x as Line).ToList();
-            var figureB = canvas.Children.Cast<UIElement>()
-                .Where(x => x is Line).Select(x => x as Line)
-                .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(figureA).ToList();
-            Morffing morffing = new Morffing();
-            var numberPoints = int.Parse(MakePoints.Text);
-            var A = int.Parse(ProportionA.Text);
-            var B = int.Parse(ProportionB.Text);
-            var linePoints = new List<Point[]>();
-            var points = BreakLines(figureA, numberPoints).ToArray();
-            linePoints.Add(points);
-            points = BreakLines(figureB, numberPoints).ToArray();
-            linePoints.Add(points);
-            var polyLine = morffing.MorffingShapes(linePoints, new double[] { A, B }, numberPoints);
-            canvas.Children.Add(polyLine);
-        }
-
-        private List<Point> BreakLines(List<Line> lines, int numberPoints)
-        {
-            var points = new List<Point>();
-            var pointsPerLine = numberPoints / lines.Count;
-            var additionalPoints = numberPoints % lines.Count;
-
-            for(var i = 0; i < lines.Count; ++i)
+            catch
             {
-                //var points = new Point[pointsPerLine + additionalPoints];
-                var deltaX = Math.Abs(lines[i].X1 - lines[i].X2) / (pointsPerLine + additionalPoints + 1);
-                var deltaY = Math.Abs(lines[i].Y1 - lines[i].Y2) / (pointsPerLine + additionalPoints + 1);
-                var x = Math.Min(lines[i].X1, lines[i].X2);
-                var y = Math.Min(lines[i].Y1, lines[i].Y2);
-
-                for(var j = 0; j < pointsPerLine + additionalPoints; ++j)
-                {
-                    x += deltaX;
-                    y += deltaY;
-
-                    //points[j] = new Point(x, y);
-                    points.Add(new Point(x, y));
-                }
-
-                //linePoints.Add(points);
-                additionalPoints = 0;
-            }
-
-            return points;
-        }
-
-        private void SetLocalCoordinate_Click(object sender, RoutedEventArgs e)
-        {
-            localCS = true;
-        }
-
-        private void BackOriginCS_Click(object sender, RoutedEventArgs e)
-        {
-            var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
-            ClearCoordinateSystem(lines);
-            coordinateSystem.SetOffsetVector(new double[] { canvas.Width / 2, canvas.Height / 2 });
-            if (enabledCS)
-            {
-                AddCoordinateSystem();
+                doZ.IsEnabled = false;
             }
         }
+
+        private void KeyUpZ2(object sender, KeyEventArgs e)
+        {
+            ActivateDoZ();
+        }
+        #endregion
     }
 }
