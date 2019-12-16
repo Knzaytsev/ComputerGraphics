@@ -707,7 +707,7 @@ namespace Drawing
         {
             var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
             ClearCoordinateSystem(lines);
-            coordinateSystem = new CoordinateSystem2DInteractor(canvas.Width, canvas.Height);
+            coordinateSystem.SetOffsetVector(new double[] { canvas.Width / 2, canvas.Height / 2 });
         }
     }
 }
