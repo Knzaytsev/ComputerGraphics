@@ -63,5 +63,7 @@
         <TextBox x:Name="ProportionB" HorizontalAlignment="Left" Height="23" Margin="1047,465,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
         <Label Content="Пропорции для B" HorizontalAlignment="Left" Margin="1047,436,0,0" VerticalAlignment="Top"/>
         <Button x:Name="MergeFigures" Content="Соединить" HorizontalAlignment="Left" Margin="918,506,0,0" VerticalAlignment="Top" Width="108" Click="MergeFigures_Click"/>
+        <Button x:Name="SetLocalCoordinate"  Content="Установить&#xD;&#xA;локальную СК" HorizontalAlignment="Left" Margin="1111,306,0,0" VerticalAlignment="Top" Width="95" Height="37" Click="SetLocalCoordinate_Click"/>
+        <Button x:Name="BackOriginCS" Content="Вернуть&#xD;&#xA;начальную СК" HorizontalAlignment="Left" Margin="1111,378,0,0" VerticalAlignment="Top" Width="95" Click="BackOriginCS_Click"/>
     </Grid>
 </Window>

@@ -40,6 +40,7 @@ namespace Drawing
         private List<LineData> dataLine = new List<LineData>();
         private bool median = false;
         private bool height = false;
+        private bool localCS = false;
 
         public MainWindow()
         {
@@ -172,6 +173,15 @@ namespace Drawing
                 height = false;
             }
 
+            if (localCS)
+            {
+                var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
+                ClearCoordinateSystem(lines);
+                var point = e.GetPosition(canvas);
+                coordinateSystem.SetOffsetVector(new double[] { point.X, point.Y });
+                localCS = false;
+            }
+
             if (e.Source is Shape)
             {
                 if (!downed)
@@ -238,10 +248,15 @@ namespace Drawing
             }
             else
             {
-                for (var i = 0; i < lines.Length; ++i)
-                {
-                    canvas.Children.Remove(lines[i]);
-                }
+                ClearCoordinateSystem(lines);
+            }
+        }
+
+        private void ClearCoordinateSystem(FrameworkElement[] lines)
+        {
+            for (var i = 0; i < lines.Length; ++i)
+            {
+                canvas.Children.Remove(lines[i]);
             }
         }
 
@@ -681,6 +696,18 @@ namespace Drawing
             }
 
             return points;
+        }
+
+        private void SetLocalCoordinate_Click(object sender, RoutedEventArgs e)
+        {
+            localCS = true;
+        }
+
+        private void BackOriginCS_Click(object sender, RoutedEventArgs e)
+        {
+            var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Axis").ToArray();
+            ClearCoordinateSystem(lines);
+            coordinateSystem = new CoordinateSystem2DInteractor(canvas.Width, canvas.Height);
         }
     }
 }

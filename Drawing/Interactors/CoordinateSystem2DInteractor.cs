@@ -98,12 +98,10 @@ namespace Drawing.Interactors
 
         public override void SetOffsetVector(double[] value)
         {
-            vectorOffset = value ?? vectorOffset;
+            vectorOffset = (value ?? vectorOffset);
             var offsetX = vectorOffset[0];
             var offsetY = vectorOffset[1];
-            var centerX = vectorCenter[0];
-            var centerY = vectorCenter[1];
-            vectorCenter = new double[2] { centerX - offsetX, centerY - offsetY };
+            vectorCenter = new double[2] { offsetX, offsetY };
         }
 
         public override void SetScale(int scale)
