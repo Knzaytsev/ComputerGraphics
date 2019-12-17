@@ -80,11 +80,13 @@
     <Compile Include="Composite\UnderLine.cs" />
     <Compile Include="CustomLine.cs" />
     <Compile Include="Data\GridData.cs" />
+    <Compile Include="Data\GroupData.cs" />
     <Compile Include="Data\LineData.cs" />
     <Compile Include="Data\MatrixData.cs" />
     <Compile Include="Interactors\ComputingMatrix.cs" />
     <Compile Include="Interactors\CoordinateSystem2DInteractor.cs" />
     <Compile Include="Interactors\CoordinateSystemInteractor.cs" />
+    <Compile Include="Interactors\GroupInteractor.cs" />
     <Compile Include="Interactors\LineInteractor.cs" />
     <Compile Include="Interactors\Morffing.cs" />
     <Compile Include="Interactors\ShapeInteractor.cs" />

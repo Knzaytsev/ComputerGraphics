@@ -40,6 +40,11 @@ namespace Drawing
         private bool height = false;
         private bool localCS = false;
         private bool enabledCS = false;
+        private byte r = 100;
+        private byte g = 50;
+        private byte b = 150;
+        private GroupInteractor group = new GroupInteractor();
+        private int groupId = 0;
 
         public MainWindow()
         {
@@ -173,7 +178,8 @@ namespace Drawing
             {
                 if (!downed)
                 {
-                    shape.ClearColor();
+                    if(!group.ContainsShape(shape))
+                        shape.ClearColor();
                     currentLine = new Line();
                     canvas.Children.Add(currentLine);
                     shape = new Composite.MainShape(currentLine, coordinateSystem);
@@ -314,20 +320,32 @@ namespace Drawing
                 }
             }
 
-            var figureA = shape.GetShapes().Select(x => x as Line).ToList();
+            /*var figureA = shape.GetShapes().Select(x => x as Line).ToList();
             var figureB = canvas.Children.Cast<UIElement>()
                 .Where(x => x is Line).Select(x => x as Line)
-                .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(figureA).ToList();
+                .Where(x => x.Tag != null && x.Tag.ToString() != "Axis").Except(figureA).ToList();*/
             Morffing morffing = new Morffing();
             var numberPoints = int.Parse(MakePoints.Text);
-            var A = int.Parse(ProportionA.Text);
+            /*var A = int.Parse(ProportionA.Text);
             var B = int.Parse(ProportionB.Text);
             var linePoints = new List<Point[]>();
             var points = BreakLines(figureA, numberPoints).ToArray();
             linePoints.Add(points);
             points = BreakLines(figureB, numberPoints).ToArray();
-            linePoints.Add(points);
-            var polyLine = morffing.MorffingShapes(linePoints, new double[] { A, B }, numberPoints);
+            linePoints.Add(points);*/
+            var figures = group.GetFigures().Select(x => x.Select(y => y as Line).ToList()).ToList();
+            var proportions = new double[stackpanelProportions.Children.Count];
+            var linePoints = new List<Point[]>();
+            foreach(var f in figures)
+            {
+                linePoints.Add(BreakLines(f, numberPoints).ToArray());
+            }
+            for(var i = 0; i < proportions.Length; ++i)
+            {
+                proportions[i] = int.Parse((stackpanelProportions.Children[i] as TextBox).Text);
+            }
+            //var polyLine = morffing.MorffingShapes(linePoints, new double[] { A, B }, numberPoints);
+            var polyLine = morffing.MorffingShapes(linePoints, proportions, numberPoints);
             canvas.Children.Add(polyLine);
         }
 
@@ -356,6 +374,15 @@ namespace Drawing
             }
 
             return points;
+        }
+
+        private void ClearMorffing_Click(object sender, RoutedEventArgs e)
+        {
+            var lines = canvas.Children.Cast<FrameworkElement>().Where(x => x.Name == "Morffing").ToList();
+            for (var i = 0; i < lines.Count; ++i)
+            {
+                canvas.Children.Remove(lines[i]);
+            }
         }
         #endregion
 
@@ -627,7 +654,7 @@ namespace Drawing
                 dataLine.Clear();
                 currentLine = new Line();
                 canvas.Children.Add(currentLine);
-                shape = new MainShape(currentLine, new CoordinateSystem2DInteractor(canvas.Width, canvas.Height));
+                shape = new MainShape(currentLine, coordinateSystem);
 
                 XmlSerializer formatter = new XmlSerializer(typeof(List<LineData>));
 
@@ -832,5 +859,47 @@ namespace Drawing
 
         #endregion
 
+        private void addGroup_Click(object sender, RoutedEventArgs e)
+        {
+            if (group.AddGroup(shape, new SolidColorBrush(Color.FromRgb(r, g, b))))
+            {
+                r += 29;
+                g -= 22;
+                b += 57;
+                TextBox textBox = new TextBox()
+                {
+                    Text = "1",
+                    Width = 50,
+                    Height = 20,
+                    Tag = groupId,
+                    HorizontalAlignment = HorizontalAlignment.Left
+                };
+                textBox.KeyUp += TextBox_KeyUp;
+                groupId++;
+                stackpanelProportions.Children.Add(textBox);
+            }
+        }
+
+        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            var regex = @"(^0+|\D)";
+            bool ok = false;
+            foreach(var p in stackpanelProportions.Children)
+            {
+                ok = ok || Regex.IsMatch((p as TextBox).Text, regex);
+            }
+
+            if (ok)
+                MergeFigures.IsEnabled = false;
+            else
+                MergeFigures.IsEnabled = true;
+        }
+
+        private void clearGroups_Click(object sender, RoutedEventArgs e)
+        {
+            group.ClearColors(shape);
+            group = new GroupInteractor();
+            stackpanelProportions.Children.RemoveRange(0, stackpanelProportions.Children.Count);
+        }
     }
 }

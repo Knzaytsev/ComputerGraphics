@@ -66,7 +66,7 @@ namespace Drawing.Interactors
             {
                 Stroke = Brushes.Gray,
                 StrokeThickness = 5,
-                Name = "Polyline"
+                Name = "Morffing"
             };
             var sumProportions = proportions.Sum();
 

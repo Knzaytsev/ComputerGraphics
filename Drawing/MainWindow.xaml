@@ -57,13 +57,18 @@
         <Label Content="Морфинг" HorizontalAlignment="Left" Margin="785,352,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="MakePoints" HorizontalAlignment="Left" Height="23" Margin="785,467,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="108" KeyUp="KeyUpMakePoints"/>
         <Label Content="Количество точек" HorizontalAlignment="Left" Margin="785,436,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="ProportionA" HorizontalAlignment="Left" Height="23" Margin="918,467,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="108" KeyUp="ProportionAKeyUp"/>
-        <Label Content="Пропорции для A" HorizontalAlignment="Left" Margin="918,436,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="ProportionB" HorizontalAlignment="Left" Height="23" Margin="1047,465,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120" KeyUp="ProportionBKeyUp"/>
-        <Label Content="Пропорции для B" HorizontalAlignment="Left" Margin="1047,436,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="MergeFigures" Content="Соединить" HorizontalAlignment="Left" Margin="918,506,0,0" VerticalAlignment="Top" Width="108" Click="MergeFigures_Click"/>
+        <TextBox x:Name="ProportionA" HorizontalAlignment="Left" Height="23" Margin="918,467,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="108" KeyUp="ProportionAKeyUp" Visibility="Hidden"/>
+        <Label Content="Пропорции для A" HorizontalAlignment="Left" Margin="918,436,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+        <TextBox x:Name="ProportionB" HorizontalAlignment="Left" Height="23" Margin="1047,465,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120" KeyUp="ProportionBKeyUp" Visibility="Hidden"/>
+        <Label Content="Пропорции для B" HorizontalAlignment="Left" Margin="1047,436,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+        <Button x:Name="MergeFigures" Content="Соединить" HorizontalAlignment="Left" Margin="785,495,0,0" VerticalAlignment="Top" Width="108" Click="MergeFigures_Click"/>
         <Button x:Name="SetLocalCoordinate"  Content="Установить&#xD;&#xA;локальную СК" HorizontalAlignment="Left" Margin="1111,306,0,0" VerticalAlignment="Top" Width="95" Height="37" Click="SetLocalCoordinate_Click"/>
         <Button x:Name="BackOriginCS" Content="Вернуть&#xD;&#xA;начальную СК" HorizontalAlignment="Left" Margin="1111,378,0,0" VerticalAlignment="Top" Width="95" Click="BackOriginCS_Click"/>
         <Button x:Name="doZ" Content="Добавить Z" HorizontalAlignment="Left" Margin="698,328,0,0" VerticalAlignment="Top" Width="74" Click="doZ_Click"/>
+        <Button x:Name="ClearMorffing" Content="Очистить" HorizontalAlignment="Left" Margin="898,495,0,0" VerticalAlignment="Top" Width="75" Click="ClearMorffing_Click"/>
+        <Button x:Name="addGroup" Content="Добавить&#xD;&#xA;группу" HorizontalAlignment="Left" Margin="698,408,0,0" VerticalAlignment="Top" Width="74" Click="addGroup_Click" Height="38"/>
+        <StackPanel x:Name="stackpanelProportions" HorizontalAlignment="Left" Height="164" Margin="994,504,0,0" VerticalAlignment="Top" Width="259"/>
+        <Button x:Name="clearGroups" Content="Очистить&#xD;&#xA;группы" HorizontalAlignment="Left" Margin="698,451,0,0" VerticalAlignment="Top" Width="74" Click="clearGroups_Click"/>
+        <GroupBox Header="Пропорции для фигур" HorizontalAlignment="Left" Height="195" Margin="983,484,0,0" VerticalAlignment="Top" Width="279"/>
     </Grid>
 </Window>
